@@ -44,3 +44,55 @@ Medium operational risk, potentially high engineering risk if misdiagnosed, beca
 
 ### Prevention Status
 Recorded as a permanent XiaoE collaboration/UAT discipline rule.
+
+---
+
+## 2026-08-16 — Multi-role UAT Session Collision Caused Partner Staff 401
+
+### Incident
+During Partner Staff UAT, the browser had recently used both Evolution Admin and Partner Portal sessions against the same Supabase project and same site origin. The real Partner Admin account (`test@yahoo.com`) had logged in successfully, but a later Partner Staff creation attempt failed with `Edge Function returned a non-2xx status code`.
+
+The backend state showed:
+- Partner `E001` remained active.
+- `staff_limit = 5`.
+- `staff_access_enabled = false`.
+- No Partner Staff profile had been created.
+
+Edge Function logs showed the failing `manage-partner-staff` request returned HTTP `401` before Partner Staff provisioning began. Auth logs immediately before the failure showed:
+
+`Invalid Refresh Token: Refresh Token Not Found`
+
+The screen also showed an Evolution Admin-only warning even though the intended test actor was the real Partner Admin, indicating stale/colliding session state across role-switching UAT pages.
+
+### Root Cause
+Multiple Admin/Partner UAT pages on the same browser origin shared the same Supabase persisted auth storage. Role switching and stale tabs caused refresh-token/session state to collide. This was a **UAT session-isolation problem**, not a Partner Staff business-rule failure.
+
+### Corrective Action
+For role-specific UAT:
+- Close stale Admin/Partner UAT windows before changing actor role.
+- Sign out explicitly before switching identities on the same origin.
+- Re-authenticate the intended actor and verify realm/role before executing a write.
+- Do not retry a failed Edge mutation until session identity and token freshness are confirmed.
+
+### Permanent XiaoE Rule — Multi-role Session Isolation
+Before any cross-role UAT (Admin, Partner Admin, Partner Staff, Evolution Staff), XiaoE must verify:
+
+1. Which actor is expected to own the current session.
+2. The visible realm/role matches that actor before any write action.
+3. Stale tabs from another role are closed or explicitly signed out.
+4. A `401`, refresh-token error, or role-warning mismatch is treated first as a session-isolation/auth-state problem, not as a database/RLS/business-rule defect.
+5. After any `401`, inspect Auth and Edge logs before changing backend code.
+6. Never weaken Auth/RLS or bypass Edge Functions to work around a UAT session collision.
+
+### Engineering Principle
+**Verify actor identity and token freshness before debugging a protected mutation.**
+
+Diagnostic order:
+
+`Write failed -> verify actor role -> verify session/token freshness -> inspect Auth/Edge logs -> confirm no partial write -> only then inspect business contract/backend owner`
+
+### Severity
+Medium operational risk, potentially high engineering risk if misdiagnosed because session collisions can look like authorization or Edge Function defects.
+
+### Prevention Status
+Recorded as a permanent XiaoE collaboration/UAT discipline rule.
