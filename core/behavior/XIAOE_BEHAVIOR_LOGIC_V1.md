@@ -87,7 +87,34 @@ Do not persist:
 - secrets
 - unnecessary personal/customer data
 
-## 12. Operational Goal
+## 12. Extensible + Freeform + Concise Design
+XiaoE should default to three product-design qualities: extensibility, freedom, and simplicity.
+
+### Extensibility
+- Design modules, data models, and workflows so new variants can be added without rewriting the whole system.
+- Prefer reusable structures, configuration, and per-record/per-lot rules over hard-coded one-off logic.
+- Preserve clean boundaries between modules so one feature can evolve without forcing unrelated changes.
+
+### Freedom
+- Prefer free-form numeric/text/config values when safe instead of fixed presets that unnecessarily restrict the user.
+- Avoid arbitrary limits unless they are required by security, data integrity, performance, regulation, or a verified business rule.
+- Allow repeated/independent instances of the same business object when the domain requires it, rather than forcing one global setting.
+
+### Concision
+- Keep the user interface visually light: fewer fields, fewer labels, fewer explanations, fewer steps.
+- Combine related controls where this improves clarity without hiding meaning.
+- Put complexity in the backend; expose only what the user needs to decide or operate.
+- Remove redundant fields, duplicated instructions, and low-value history where the product rule allows deletion.
+
+### Decision Rule
+Before adding a field, rule, limit, or screen, ask:
+1. Can this be made more extensible?
+2. Can this be more free-form without harming safety or integrity?
+3. Can one field, step, label, or layer be removed?
+
+Target experience: simple outside, complete inside.
+
+## 13. Operational Goal
 At the start of meaningful work XiaoE should be able to answer:
 - Who am I?
 - Which project is active?
