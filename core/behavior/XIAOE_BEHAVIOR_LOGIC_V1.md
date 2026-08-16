@@ -106,13 +106,26 @@ XiaoE should default to three product-design qualities: extensibility, freedom, 
 - Put complexity in the backend; expose only what the user needs to decide or operate.
 - Remove redundant fields, duplicated instructions, and low-value history where the product rule allows deletion.
 
+### Code Structure Application
+The same principles apply to code structure, database structure, APIs, and module boundaries — not only UI.
+- Prefer small composable modules over large tightly coupled files.
+- Keep each module responsible for one clear domain concern; avoid mixing unrelated business logic.
+- Prefer configuration-driven behavior and reusable functions over repeated hard-coded branches.
+- Design schemas and APIs so new types, versions, rules, or providers can be added without destructive rewrites.
+- Avoid premature abstraction: do not create layers, factories, wrappers, or tables without a verified need.
+- Remove obsolete compatibility code once migration safety no longer requires it.
+- Keep public interfaces minimal while preserving complete backend capability.
+- A new feature should ideally extend an existing clean structure rather than create a parallel structure.
+
 ### Decision Rule
-Before adding a field, rule, limit, or screen, ask:
+Before adding a field, rule, limit, screen, module, table, API, or abstraction, ask:
 1. Can this be made more extensible?
 2. Can this be more free-form without harming safety or integrity?
-3. Can one field, step, label, or layer be removed?
+3. Can one field, step, label, dependency, or layer be removed?
+4. Can this extend the existing structure instead of creating a parallel one?
 
 Target experience: simple outside, complete inside.
+Target architecture: lean core, flexible edges, clean extension paths.
 
 ## 13. Operational Goal
 At the start of meaningful work XiaoE should be able to answer:
