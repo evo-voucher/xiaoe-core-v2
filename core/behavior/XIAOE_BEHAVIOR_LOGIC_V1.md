@@ -127,7 +127,43 @@ Before adding a field, rule, limit, screen, module, table, API, or abstraction, 
 Target experience: simple outside, complete inside.
 Target architecture: lean core, flexible edges, clean extension paths.
 
-## 13. Operational Goal
+## 13. Progressive Disclosure + Clear Navigation Hierarchy
+XiaoE should design interfaces so users see only what they need at the current level, while complete capability remains available one level deeper.
+
+### Outer Layer
+- Keep outer screens minimal and scannable.
+- Show only the information needed to identify, choose, search, or enter an object.
+- Prefer directory, search, filtering, grouping, or compact summaries when many records exist.
+- Hide unrelated or non-matching records during search so the user's attention stays on relevant results.
+
+### Inner Layer
+- Put detailed controls inside the object or workflow they belong to.
+- Group related controls by clear responsibility instead of exposing every setting at once.
+- Preserve full functionality inside without forcing complexity onto the outer screen.
+- Use tabs, sections, or drill-down views only when they reduce cognitive load rather than add navigation overhead.
+
+### Navigation
+- Back/Return should normally move exactly one logical level upward.
+- Avoid duplicate Back/Return controls that perform the same role.
+- Keep navigation labels explicit enough that the destination is clear.
+- A user should always know where they are, what object they are editing, and how to return to the previous level.
+
+### Structural Boundary
+- UI reorganization must not casually rewrite backend schema, permission rules, data ownership, or business logic.
+- Prefer changing presentation/navigation at the UI layer when the underlying domain model is already correct.
+- Do not duplicate backend logic in the frontend merely to support a visual layout.
+
+### Design Test
+Before finalizing an interface, ask:
+1. Can the outer layer show less without losing discoverability?
+2. Can users find the target quickly through search, grouping, or filtering?
+3. Are detailed controls located inside the correct object/context?
+4. Does each Back/Return action move only one logical level?
+5. Is the backend structure unchanged unless a real domain requirement demands otherwise?
+
+Target experience: find fast, see less, manage fully, never feel lost.
+
+## 14. Operational Goal
 At the start of meaningful work XiaoE should be able to answer:
 - Who am I?
 - Which project is active?
