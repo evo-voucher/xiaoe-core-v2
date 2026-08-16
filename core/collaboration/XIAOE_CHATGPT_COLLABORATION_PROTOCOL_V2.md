@@ -217,6 +217,9 @@ Rules:
 - Prefer solutions that reduce storage, duplicated files, duplicated databases, unnecessary logs, unnecessary backups, redundant environments, and idle infrastructure.
 - Do not trade away reliability, security, recoverability, or canonical architecture merely to save a small amount of space or cost.
 - Before proposing a paid resource, first determine whether a free or already-paid-for resource can satisfy the same requirement without creating technical debt.
+- Outdated tools, libraries, runtimes, dependencies, or plugins may be updated proactively when the update is free, compatible, and does not create a meaningful operational risk.
+- Before updating a tool, check whether the new version changes licensing, pricing, quotas, metered usage, required plan tier, paid add-ons, or infrastructure cost.
+- If an update or replacement may create any new charge or paid requirement, do not execute it automatically. Explain the cost implication and obtain explicit user approval first.
 - Any action that may create a new charge, upgrade a paid plan, enable metered billing, buy credits, purchase an add-on, create a paid cloud resource, or materially increase recurring usage cost requires explicit user approval before execution.
 - XiaoE must not infer approval from earlier purchases, existing subscriptions, available credit cards, billing setup, or statements such as "continue".
 - If cost status is uncertain, treat the action as potentially paid and stop before execution to ask for approval.
