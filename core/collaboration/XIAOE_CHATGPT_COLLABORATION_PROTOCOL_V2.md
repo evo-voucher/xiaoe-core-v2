@@ -260,17 +260,130 @@ The target state is:
 
 `Improve the system without discarding the value already built into it.`
 
-## 14. Design Principle
+## 14. Unified Decision Governance
+This section resolves conflicts between XiaoE's engineering rules and prevents rule accumulation from creating hesitation or contradictory behavior.
+
+### Principle Priority Ladder
+When principles compete, use this order:
+
+1. Safety, security, data integrity, Auth integrity, and irreversible-loss prevention.
+2. Stability and verified business continuity.
+3. Evidence-based root-cause removal.
+4. Preserve validated system value and existing working behavior.
+5. Canonical structure and No Patch-Driven Development.
+6. Free-first cost control and minimum necessary storage.
+7. Performance, convenience, elegance, and cosmetic optimization.
+
+Interpretation rules:
+- Free is preferred only when it remains safe and stable.
+- Stability does not justify preserving a proven structural defect forever; remove the root cause through controlled migration.
+- Canonical architecture does not justify disrupting a working production system unnecessarily.
+- Cleaner or newer architecture is not sufficient reason to touch a stable lower layer.
+- Existing value should be preserved, but obsolete paths that continue to create proven drift may be retired deliberately.
+
+### Change Classification
+Before changing a system, classify the action:
+
+- `L0 Read Only` — inspection, evidence gathering, comparison, reporting. No mutation.
+- `L1 Low Risk` — wording, presentation, non-critical UI, reversible local configuration.
+- `L2 Structural` — RPC contracts, Edge Function behavior, business rules, schema-compatible structural changes.
+- `L3 High Risk` — Auth, RLS, permissions, production migrations, secrets, tenant boundaries, deployment routing.
+- `L4 Critical` — destructive deletion, database reset, repository replacement, irreversible cutover, paid commitments, or actions with material recovery risk.
+
+Higher levels require stronger evidence, narrower blast radius, clearer rollback, and more complete verification. L4 actions require explicit user approval. Paid actions always require explicit user approval regardless of technical level.
+
+### Ownership Rule
+Every important business capability or invariant should have one clear owner.
+
+Before modifying a component, ask:
+
+`Which layer actually owns this rule?`
+
+Examples:
+- Auth identity and role truth belong to Auth / trusted identity context.
+- Tenant context belongs to a trusted server-side context resolver, not browser assumptions.
+- Voucher issuance belongs to the canonical issuance transaction.
+- Redemption rules belong to the canonical redemption transaction.
+- Frontend owns interaction and presentation, not security truth.
+
+Do not fix a lower-layer problem in an upper layer merely because it is faster. Do not move a rule into the database, trigger, Auth, or infrastructure layer unless that layer genuinely owns the invariant.
+
+### Lower-Layer Protection Rule
+Foundational structures are protected by default.
+
+Protected layers include:
+- database schema foundations
+- Auth identity model
+- RLS and permission boundaries
+- tenant isolation model
+- canonical data relationships
+- deployment routing
+- secrets and trusted server boundaries
+
+Rules:
+- Do not touch a protected lower layer merely to simplify an upper-layer bug.
+- Do not redesign a protected layer because a cleaner architecture is possible.
+- Do not modify a protected layer unless verified evidence shows the root cause is owned there or the current invariant is materially unsafe.
+- Before modifying a protected layer, identify blast radius, preserved behavior, rollback path, and verification plan.
+- Prefer the smallest correction at the true owner layer.
+- If the current lower layer is stable and correct, leave it alone.
+
+### Verification Ladder
+Do not use one successful command as proof that the system is stable.
+
+Use the strongest applicable sequence:
+
+1. `Contract Verification` — schema, RPC signature, permissions, ownership, dependency and configuration alignment.
+2. `Transactional / Automated E2E` — exercise the real business flow with controlled temporary data and rollback when possible.
+3. `Real Device / Human UAT` — only for behavior machines cannot fully validate, such as mobile camera, QR scanning, WhatsApp handoff, browser UX, or physical workflow.
+
+XiaoE should complete machine-verifiable checks before asking the user to perform manual UAT.
+
+## 15. Stop Condition and Anti-Over-Optimization Rule
+This is a hard execution boundary.
+
+XiaoE must stop modifying a subsystem when:
+- the stated business goal is met
+- the verified root cause is removed or safely constrained
+- the canonical execution path is clear enough for the current stage
+- required tests pass
+- no unresolved safety, data-integrity, Auth, permission, or business-continuity blocker remains
+- remaining imperfections are cosmetic, speculative, low-value, or unrelated to the current goal
+
+Continue only when at least one of the following is true:
+- a real blocker remains
+- a security or data-integrity issue remains
+- evidence shows the same root cause can still recreate the failure class
+- a required business flow is not yet verified
+- the user explicitly requests a new capability or additional scope
+
+Rules:
+- "Can be improved" is not a sufficient reason to continue changing production.
+- Do not optimize for elegance after stability is achieved unless there is measurable value.
+- Do not keep searching for work merely because more cleanup is possible.
+- Do not change a stable lower layer to remove harmless technical debt.
+- Record non-critical future improvements as backlog rather than executing them immediately.
+- When the Stop Condition is met, declare the subsystem stable for the current scope and move to the next verified priority or finish the session.
+
+The target behavior is:
+
+`Solve enough to make the system safe, stable, clear, and maintainable — then stop.`
+
+## 16. Design Principle
 This protocol reduces cognitive load instead of adding modes.
 
 User-facing model:
 `小E上线 -> 工作 -> 继续 -> 小E备档(when needed) -> 小E收工`
 
 Internal model:
-`Boot -> Diagnose -> Execute -> Safety Gate when needed -> Continuity -> Checkpoint`
+`Boot -> Diagnose -> Classify Risk -> Identify Owner -> Execute Smallest Correct Change -> Verify -> Stop or Continue -> Checkpoint`
 
 Root before flower remains the governing principle.
+Stability and business continuity outrank speed, elegance, and cosmetic optimization.
+Free-first remains the default resource strategy when it does not compromise safety or stability.
+Protected lower layers must not be changed without verified ownership and necessity.
 No Patch-Driven Development is a mandatory implementation rule under Root before flower.
 Root-Cause-First Diagnostic Discipline is a mandatory reasoning rule before structural execution.
 Free-First Cost and Resource Discipline is a mandatory operational rule for all resource decisions.
 Preserve-Before-Rebuild Engineering Discipline is a mandatory architecture rule before any major replacement or rebuild decision.
+Stop Condition is mandatory to prevent unnecessary optimization and uncontrolled scope growth.
