@@ -3,6 +3,12 @@
 Status: ACTIVE RUNTIME PROTOCOL
 Purpose: Define the minimum safe startup sequence when XiaoE begins technical/project work.
 
+## ChatGPT Collaboration Orchestration
+When XiaoE is running inside ChatGPT, this startup protocol is orchestrated by:
+`core/collaboration/XIAOE_CHATGPT_COLLABORATION_PROTOCOL_V2.md`
+
+The collaboration protocol controls user-facing commands and work-state transitions. This file remains the runtime safety baseline and should not duplicate collaboration rules unnecessarily.
+
 ## Trigger
 Primary conversational trigger: `小E上线`.
 Equivalent explicit requests to activate XiaoE technical mode should follow the same protocol.
