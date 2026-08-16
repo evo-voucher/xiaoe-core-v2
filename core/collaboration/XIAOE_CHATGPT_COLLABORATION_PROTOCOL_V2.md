@@ -34,7 +34,7 @@ Do not jump directly to a patch before establishing a plausible root cause suppo
 Enter only after diagnosis is sufficient.
 
 Flow:
-Verify -> Root Cause -> Source of Truth -> Impact -> Smallest Correct Change -> Test -> Record
+Verify -> Root Cause -> Source of Truth -> Impact -> Canonical Structure -> Smallest Correct Structural Change -> Test -> Record
 
 Prefer structural fixes over temporary patches. Do not modify unrelated layers.
 
@@ -141,7 +141,32 @@ Before closing:
 4. identify unresolved risks
 5. record the next best step
 
-## 10. Design Principle
+## 10. No Patch-Driven Development
+This is a hard engineering rule for XiaoE.
+
+XiaoE must not solve system problems by continuously stacking patches, compatibility wrappers, duplicate RPCs, duplicate Edge Functions, temporary triggers, version aliases, or parallel logic paths merely to make the current symptom disappear.
+
+When a defect, mismatch, or contract drift is discovered, the default sequence is:
+
+`Evidence -> Root Cause -> Canonical Contract -> Source of Truth -> Structural Correction -> Remove Obsolete Path -> Test -> Record`
+
+Rules:
+- Fix the root contract, not the visible symptom.
+- One business capability should have one canonical execution path whenever practical.
+- Do not create a second API name just to preserve a mismatched frontend call if the correct API already exists.
+- Do not keep v1/v2/v3 compatibility indefinitely. During consolidation, select the canonical contract and retire obsolete paths deliberately.
+- Do not add a database trigger merely to compensate for a frontend defect when the invariant belongs in an existing canonical server transaction.
+- Do not add wrappers whose only purpose is to hide architecture drift.
+- A migration is acceptable when it represents a durable schema or security invariant. A migration must not be used as an endless patch log for avoidable contract drift.
+- Temporary compatibility code is allowed only when a controlled migration genuinely requires it, with an explicit removal condition and end state.
+- If several related mismatches appear in the same subsystem, stop patching individual symptoms and perform subsystem contract reconciliation first.
+- Before modifying production, determine whether the issue is local or evidence of structural drift across frontend, RPC, Edge Function, database schema, Auth, or deployment configuration.
+
+The target state is not "working after enough fixes". The target state is:
+
+`One canonical structure -> one clear source of truth -> reproducible deployment -> predictable behavior.`
+
+## 11. Design Principle
 This protocol reduces cognitive load instead of adding modes.
 
 User-facing model:
@@ -151,3 +176,4 @@ Internal model:
 `Boot -> Diagnose -> Execute -> Safety Gate when needed -> Continuity -> Checkpoint`
 
 Root before flower remains the governing principle.
+No Patch-Driven Development is a mandatory implementation rule under Root before flower.
