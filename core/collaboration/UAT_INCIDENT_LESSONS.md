@@ -96,3 +96,70 @@ Medium operational risk, potentially high engineering risk if misdiagnosed becau
 
 ### Prevention Status
 Recorded as a permanent XiaoE collaboration/UAT discipline rule.
+
+---
+
+## 2026-08-16 — Patch Temptation Exposed Owner-Contract Violation in Partner Staff Edge
+
+### Incident
+After the Partner Staff UAT moved from an initial `401` to a later `403`, there was a temptation to treat the failure as a missing permission and solve it by granting `service_role` direct `SELECT` access to business tables.
+
+Read-only diagnosis showed the real sequence:
+- `auth/v1/user` returned `200`; the JWT was valid.
+- `current_operational_realm()` returned `200`; the actor context was valid.
+- The real Partner Admin mapping was unique and correct: `realm='partner'`, `role='partner_admin'`.
+- The Edge Function then performed direct reads against `public.partners` and `public.partner_users` using the service-role client.
+- Those tables intentionally did not grant `service_role` direct `SELECT` access.
+- The existing canonical security model already exposed trusted `SECURITY DEFINER` RPCs for Partner Staff management.
+
+The direct table reads inside the Edge Function therefore violated the canonical owner contract. The permission error was a symptom of that architectural mismatch, not evidence that the table grants were wrong.
+
+### Root Cause
+`manage-partner-staff` mixed two different trust models:
+
+1. Canonical model: service-role calls narrow trusted RPCs that own validation, tenant checks, staff limits, status rules, and audit logging.
+2. Non-canonical implementation: service-role directly reads protected business tables before calling those RPCs.
+
+The Edge implementation had drifted away from the intended security boundary.
+
+### Corrective Action
+Do **not** broaden table privileges to satisfy a caller that is bypassing the owner contract.
+
+The correct repair is to make the Edge Function an orchestrator only:
+- Auth Admin API for Auth-user creation/password operations.
+- `partner_provision_staff()` for creation.
+- `partner_update_staff_profile()` for rename/suspend/activate/remove.
+- `partner_record_staff_password_reset()` for audit after password reset.
+- `resolve_partner_management_context()` / caller-scoped directory RPCs for tenant and actor validation.
+- No direct `SELECT` from protected Partner business tables when a trusted RPC already owns that responsibility.
+
+### Permanent XiaoE Rule — Owner Contract Before Permission Change
+When a protected operation fails with `401/403/permission denied`, XiaoE must not immediately add grants, weaken RLS, expose tables, or add bypasses.
+
+Required diagnostic order:
+
+1. Verify token/authentication.
+2. Verify actor realm/role mapping.
+3. Identify the exact failing call from logs.
+4. Identify which layer owns that data/action.
+5. Inspect whether a canonical RPC/Edge contract already exists.
+6. If the caller bypasses that contract, repair the caller first.
+7. Change grants/RLS only when evidence shows the canonical owner itself lacks a required permission.
+8. Prefer reducing duplicate authorization logic over adding another permission path.
+
+### Engineering Principle
+**A permission error does not automatically mean a permission grant is missing. It may mean the caller is operating at the wrong layer.**
+
+XiaoE should prefer:
+
+`Trace failing call -> identify owner -> use existing contract -> remove bypass -> verify -> stop`
+
+over:
+
+`See 403 -> add grant -> retry -> add another grant -> accumulate patches`
+
+### Severity
+High architectural risk. A quick permission grant could have weakened the canonical security boundary across all Partners just to make one Edge path work.
+
+### Prevention Status
+Recorded as a permanent XiaoE engineering discipline rule: **Root before flower; owner contract before permission expansion.**
