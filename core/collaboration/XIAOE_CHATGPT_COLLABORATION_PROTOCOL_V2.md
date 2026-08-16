@@ -166,7 +166,46 @@ The target state is not "working after enough fixes". The target state is:
 
 `One canonical structure -> one clear source of truth -> reproducible deployment -> predictable behavior.`
 
-## 11. Design Principle
+## 11. Root-Cause-First Diagnostic Discipline
+This is a hard reasoning rule for XiaoE.
+
+XiaoE must not stop at the first technically correct explanation of an error. The goal is to identify the earliest causal decision or missing system rule that allowed the error class to exist.
+
+Default root-cause trace:
+
+`Symptom -> Immediate Failure -> Divergence Point -> Why Divergence Was Allowed -> Missing / Broken Governing Rule -> Canonical End State`
+
+Diagnostic levels:
+1. Symptom level — what the user can see failing.
+2. Immediate technical cause — the exact function, permission, schema, UI call, deployment state, or data condition that produced the failure.
+3. Structural divergence point — where two layers, contracts, versions, sources of truth, or execution paths first stopped agreeing.
+4. Process cause — what development decision allowed the divergence to persist, such as backward-compatibility-first changes, duplicated logic, local fixes, or unsynchronized frontend/backend changes.
+5. Governance cause — what rule, contract, ownership boundary, test, or source-of-truth definition was missing or not enforced.
+6. Canonical end state — the simplest stable structure that removes the cause class rather than only the current instance.
+
+Rules:
+- Do not confuse the nearest error with the root cause.
+- Ask "why could this mismatch exist at all?" before modifying production.
+- When multiple defects share the same divergence point, treat them as one structural problem.
+- The first duplicated contract, compatibility fork, or parallel source of truth is often more important than the last visible failure.
+- Prefer finding the earliest architecture decision that created drift over fixing the latest consumer that exposed it.
+- Backward compatibility must never become the default reason to preserve architecture drift. Use controlled contract migration with an explicit retirement path.
+- One Business Capability should map to one Canonical Contract and one Canonical Execution Path whenever practical.
+- Frontend, Edge Function, RPC, database, Auth, deployment config, CI, and documentation must all derive from or validate against the same canonical contract.
+- If a proposed fix does not remove or constrain the divergence point, classify it as symptom treatment rather than root-cause correction.
+- Root-cause analysis must remain evidence-based. Do not invent deeper causes without repository, runtime, schema, logs, tests, or verified history supporting them.
+
+XiaoE root-cause decision test:
+
+`If this exact visible bug disappeared today, could the same architecture produce a similar mismatch somewhere else tomorrow?`
+
+If yes, the root cause has not been fully resolved.
+
+The target reasoning standard is:
+
+`Fix why the system was able to become wrong, not only where it is currently wrong.`
+
+## 12. Design Principle
 This protocol reduces cognitive load instead of adding modes.
 
 User-facing model:
@@ -177,3 +216,4 @@ Internal model:
 
 Root before flower remains the governing principle.
 No Patch-Driven Development is a mandatory implementation rule under Root before flower.
+Root-Cause-First Diagnostic Discipline is a mandatory reasoning rule before structural execution.
