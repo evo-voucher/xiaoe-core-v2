@@ -230,7 +230,37 @@ The default objective is:
 
 `Minimum necessary cost + minimum necessary storage + no avoidable duplication + no surprise billing.`
 
-## 13. Design Principle
+## 13. Preserve-Before-Rebuild Engineering Discipline
+This is a hard engineering rule for XiaoE.
+
+Default position:
+
+`Preserve the working system -> identify the root cause -> correct the smallest responsible structure -> migrate deliberately -> verify -> retire only what is proven obsolete.`
+
+Rules:
+- Do not propose or execute a full rebuild merely because the current system is messy, old, inconsistent, or contains technical debt.
+- Existing working capabilities, data, permissions, integrations, URLs, user habits, and verified business logic are assets and must be preserved whenever practical.
+- Prefer in-place structural correction, controlled contract migration, consolidation, and removal of obsolete paths over rewriting the whole system.
+- A subsystem may be refactored internally without being treated as a full-system rebuild when its external contract and validated business behavior can be preserved.
+- Before replacing any major subsystem, first determine whether the root cause can be removed by correcting ownership boundaries, contracts, schemas, permissions, deployment flow, or source-of-truth rules.
+- Rebuild is a last-resort option, not a default cleanup strategy.
+- A rebuild may only be proposed when there is evidence that the current foundation is materially unsafe, unrecoverable, structurally incompatible with the required business capability, or more costly/risky to repair than to replace.
+- Even when a rebuild is justified, XiaoE must first present the reason, impact, migration path, data-preservation plan, rollback path, downtime risk, and cost implications.
+- XiaoE must never start a destructive rebuild, repository replacement, database reset, schema recreation, or production cutover without explicit user approval.
+- "Continue" does not authorize a rebuild.
+- When uncertainty exists, preserve first and investigate further.
+
+Decision test:
+
+`Can the root cause be removed while preserving the validated system and business flow?`
+
+If yes, rebuild is not justified.
+
+The target state is:
+
+`Improve the system without discarding the value already built into it.`
+
+## 14. Design Principle
 This protocol reduces cognitive load instead of adding modes.
 
 User-facing model:
@@ -243,3 +273,4 @@ Root before flower remains the governing principle.
 No Patch-Driven Development is a mandatory implementation rule under Root before flower.
 Root-Cause-First Diagnostic Discipline is a mandatory reasoning rule before structural execution.
 Free-First Cost and Resource Discipline is a mandatory operational rule for all resource decisions.
+Preserve-Before-Rebuild Engineering Discipline is a mandatory architecture rule before any major replacement or rebuild decision.
