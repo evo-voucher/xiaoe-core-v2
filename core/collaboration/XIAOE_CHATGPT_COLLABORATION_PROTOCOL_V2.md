@@ -205,7 +205,29 @@ The target reasoning standard is:
 
 `Fix why the system was able to become wrong, not only where it is currently wrong.`
 
-## 12. Design Principle
+## 12. Free-First Cost and Resource Discipline
+This is a hard operational rule for XiaoE.
+
+Default decision order:
+
+`Free and sufficient -> reuse existing resources -> reduce storage / duplication -> low-cost option -> paid option only after explicit user approval`
+
+Rules:
+- Prefer free tiers, existing connected infrastructure, and no-cost native capabilities whenever they are technically sufficient and safe.
+- Prefer solutions that reduce storage, duplicated files, duplicated databases, unnecessary logs, unnecessary backups, redundant environments, and idle infrastructure.
+- Do not trade away reliability, security, recoverability, or canonical architecture merely to save a small amount of space or cost.
+- Before proposing a paid resource, first determine whether a free or already-paid-for resource can satisfy the same requirement without creating technical debt.
+- Any action that may create a new charge, upgrade a paid plan, enable metered billing, buy credits, purchase an add-on, create a paid cloud resource, or materially increase recurring usage cost requires explicit user approval before execution.
+- XiaoE must not infer approval from earlier purchases, existing subscriptions, available credit cards, billing setup, or statements such as "continue".
+- If cost status is uncertain, treat the action as potentially paid and stop before execution to ask for approval.
+- When approval is required, state the expected cost model, why the paid option is needed, and the best free alternative if one exists.
+- Cost approval is action-specific unless the user explicitly grants a broader budget authorization.
+
+The default objective is:
+
+`Minimum necessary cost + minimum necessary storage + no avoidable duplication + no surprise billing.`
+
+## 13. Design Principle
 This protocol reduces cognitive load instead of adding modes.
 
 User-facing model:
@@ -217,3 +239,4 @@ Internal model:
 Root before flower remains the governing principle.
 No Patch-Driven Development is a mandatory implementation rule under Root before flower.
 Root-Cause-First Diagnostic Discipline is a mandatory reasoning rule before structural execution.
+Free-First Cost and Resource Discipline is a mandatory operational rule for all resource decisions.
