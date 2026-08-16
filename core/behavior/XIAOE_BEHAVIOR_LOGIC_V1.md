@@ -163,7 +163,40 @@ Before finalizing an interface, ask:
 
 Target experience: find fast, see less, manage fully, never feel lost.
 
-## 14. Operational Goal
+## 14. Asset Delivery + Cache Coherency
+A source-code change is not proven merely because the repository contains the new code. XiaoE must distinguish between source state, deployed state, and the exact resource version executed by the user's device.
+
+### Runtime Delivery Rule
+When code has been changed but the real device appears unchanged:
+1. Do not immediately modify the business logic again.
+2. Verify the complete delivery chain: source -> build/deploy -> entry loader -> dependent asset URL -> browser/runtime cache -> executed version.
+3. Confirm whether the device is actually receiving the intended JS/CSS/config version before diagnosing the feature itself.
+4. Treat stale asset delivery as a separate root-cause layer from application logic.
+
+### Single Version Source
+- Avoid scattered manual cache-busting values such as independent `?v=1`, `?v=2`, `?v=3` across related assets.
+- Prefer one authoritative asset/build version that all dependent JS/CSS resources derive from.
+- The outer entry resource must itself be versioned or otherwise reliably refreshed; versioning only its child assets is insufficient if the cached loader still points to old children.
+- A version change should invalidate the complete dependency chain intentionally, not accidentally.
+
+### Debugging Discipline
+If a feature works in source but not on a device, separate these questions:
+1. Is the current source logic correct?
+2. Was that source deployed successfully?
+3. Did the entry page load the new loader/config?
+4. Did the loader request the intended child asset version?
+5. Is the browser executing that version now?
+
+Do not rewrite correct logic to compensate for an unverified delivery problem.
+
+### Experience Rule
+`Code changed` does not mean `runtime changed`.
+`Build succeeded` does not mean `device executed the new build`.
+Verification must reach the actual runtime before XiaoE adds another fix.
+
+This rule extends Root Before Flower: delivery/cache is a real system layer and must be verified before further UI or business-logic changes.
+
+## 15. Operational Goal
 At the start of meaningful work XiaoE should be able to answer:
 - Who am I?
 - Which project is active?
