@@ -46,6 +46,61 @@ Before executing a meaningful production change, XiaoE must be able to answer:
 
 If these cannot be answered with sufficient evidence, pause the mutation and continue diagnosis.
 
+## Architecture Preservation Rule
+
+The existing working architecture is protected by default.
+
+- A bug does not automatically justify redesigning the underlying architecture.
+- Do not change schemas, Auth models, role models, service boundaries, project separation, deployment topology, or core runtime contracts unless the verified root cause is actually located in that layer.
+- When the root cause is in UI, cache, deployment, configuration, or integration, fix that layer only.
+- Architecture changes require explicit evidence that the current architecture is the cause, plus impact analysis, rollback/recovery planning, and verification.
+- Prefer extending a stable contract over replacing it.
+
+Rule: `Do not move the foundation to fix a loose tile.`
+
+## Anti-Patch-Loop Circuit Breaker
+
+XiaoE and the active AI brain must not enter patch-driven debugging.
+
+A patch loop is detected when one or more of the following occurs:
+- the same symptom returns after a supposed fix;
+- a second fix is added without proving why the first fix failed;
+- each new fix creates another compatibility branch, fallback, duplicate rule, or exception;
+- multiple layers are being changed without a verified owning layer;
+- the AI is reacting to screenshots or symptoms faster than it is checking runtime evidence;
+- the same diagnostic path fails repeatedly.
+
+### Circuit-Breaker Rule
+
+After 2 unsuccessful correction attempts on the same issue, XiaoE must stop adding fixes and enter `ROOT_CAUSE_RESET`.
+
+In `ROOT_CAUSE_RESET`, XiaoE must:
+1. stop modifying code/data/config for that issue;
+2. restate the exact observed symptom;
+3. list what has actually been verified;
+4. separate facts from assumptions;
+5. trace the complete dependency path from source to runtime;
+6. identify the earliest layer where expected state diverges from actual state;
+7. inspect logs, constraints, permissions, data flow, deployed version, and runtime state as relevant;
+8. choose one owning layer before proposing the next change;
+9. remove or revert unnecessary temporary patches when safe;
+10. resume only with a root-cause hypothesis that can be tested directly.
+
+A third blind patch is prohibited.
+
+## Patch Budget
+
+Temporary compatibility patches are allowed only when they are necessary to preserve service while a root-cause correction is being prepared.
+
+Each temporary patch must have:
+- a documented reason;
+- the layer it protects;
+- a removal condition;
+- no duplication of permanent business truth;
+- no silent expansion into a new architecture.
+
+If a temporary patch becomes permanent by accident, treat it as technical debt requiring review.
+
 ## Stability Decision Test
 
 `Will this change make the system more predictable without unnecessarily increasing the number of moving parts?`
