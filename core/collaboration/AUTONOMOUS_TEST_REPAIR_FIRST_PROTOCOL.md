@@ -11,7 +11,7 @@ XiaoE should not narrate every internal engineering step to the user.
 
 Default sequence:
 
-`Load current project state -> verify live sources -> simulate/automate the full safe system flow -> detect failures -> identify root cause -> repair the correct owner layer -> rerun the full safe flow -> repeat until stable -> report final result`
+`Load current project state -> verify live sources -> simulate/automate the full safe system flow -> detect failures -> identify root cause -> repair the correct owner layer -> run Quick Post-Repair Simulation -> rerun the wider affected flow when justified -> repeat until stable -> report final result`
 
 ## Full-Flow-First Rule
 Before asking the user to click, log in, scan, or reproduce an issue, XiaoE should first test as much of the end-to-end workflow as can be safely verified by machine.
@@ -40,13 +40,37 @@ If a machine-verifiable failure is found and the correct fix is:
 
 then XiaoE should repair it immediately without asking the user for another confirmation.
 
-After the repair, XiaoE must rerun the relevant test and then rerun the wider affected flow to check for regression.
+After the repair, XiaoE must rerun the relevant test and then rerun the wider affected flow to check for regression when the change can affect shared behavior.
+
+## Quick Post-Repair Simulation Rule
+Every system repair must be followed immediately by one fast, targeted machine-verifiable simulation of the exact failed path before XiaoE reports the repair as fixed.
+
+The quick simulation should be the lightest reliable test that can answer one question: **does the original failure still reproduce after the change?**
+
+Preferred order:
+1. Static/source contract check when that alone proves the repaired condition.
+2. Local or mocked logic test for the affected function/path.
+3. Targeted API/RPC/Edge/database call against UAT or isolated synthetic data.
+4. Targeted browser/runtime flow when the failure depends on runtime integration.
+5. Real-device UAT only when the behavior is device-specific and cannot be simulated reliably.
+
+Rules:
+- Do not run a full regression suite merely to verify a small local repair.
+- Do not declare FIXED if the quick simulation still reproduces the same failure.
+- If the same path fails again after two repair attempts, stop patching and reopen root cause/architecture.
+- If the repair touches shared Auth, RLS, schema, migration, shared runtime infrastructure, or release/cutover behavior, run an appropriately scoped wider regression after the quick simulation passes.
+- Prefer free, lightweight, reversible tests and reuse existing checkers/UAT data to save time and space.
+
+Result labels:
+- `Quick Simulation: PASS` = original machine-verifiable failure no longer reproduces.
+- `Quick Simulation: FAIL` = original failure still reproduces; continue diagnosis.
+- `Quick Simulation: BLOCKED` = only a human/device-specific step can prove the result.
 
 ## Root-Cause Guardrail
 Autonomy does not mean patching faster.
 
 XiaoE must still follow:
-`Observe -> Root Cause -> Source of Truth -> Smallest Correct Change -> Test -> Regression Test`
+`Observe -> Root Cause -> Source of Truth -> Smallest Correct Change -> Quick Post-Repair Simulation -> Test -> Regression Test`
 
 If the same approach fails twice, stop repeating it and re-open the architecture/root cause.
 
@@ -71,6 +95,7 @@ Preferred user-facing output after autonomous work:
 - what was actually tested
 - what failed
 - what was repaired
+- Quick Simulation result
 - evidence that the repair passed retest
 - only the remaining human/device step, if any
 
@@ -78,6 +103,7 @@ Preferred user-facing output after autonomous work:
 A machine simulation may validate logic, data integrity, permissions, and backend flow, but it must not be presented as proof of device-specific UX that was never actually exercised.
 
 Use separate labels when useful:
+- Quick Simulation: PASS / FAIL / BLOCKED
 - Machine Flow: PASS
 - Deployment: PASS
 - Real Device UAT: NOT REQUIRED / PENDING / PASS
@@ -86,4 +112,4 @@ Use separate labels when useful:
 Eric should normally receive the result after XiaoE has already completed diagnosis and safe repair, not be used as the debugging loop.
 
 Permanent principle:
-**XiaoE simulates first, repairs autonomously when safe, retests the whole affected flow, and reports only the verified result or the minimum unavoidable user action.**
+**XiaoE repairs, immediately runs the lightest reliable simulation of the original failed path, escalates regression only when justified, and reports only the verified result or the minimum unavoidable user action.**
