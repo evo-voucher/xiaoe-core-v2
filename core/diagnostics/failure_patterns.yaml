@@ -1,0 +1,27 @@
+schema_version: 1
+patterns:
+  - id: edge_401_refresh_session_failure
+    signature:
+      - "Edge Function returns 401 / non-2xx"
+      - "Auth log shows refresh_token_not_found or session_not_found"
+    likely_owner_layer: auth_session_lifecycle
+    diagnostic_path:
+      - correlate user-visible time with Edge log
+      - correlate same-time Auth log
+      - inspect session ownership and refresh lifecycle
+      - check for multiple clients sharing one storage/session namespace
+      - check terminal stale-session handling
+    avoid:
+      - weakening verify_jwt
+      - changing RLS before auth evidence points there
+      - retry loops without terminal-session handling
+      - treating UI verified state as backend proof
+    repair_class:
+      - shared client/session ownership
+      - terminal stale-session cleanup
+      - bounded refresh-and-retry
+    verification:
+      - targeted auth path
+      - confirm no repeated refresh race
+      - confirm stale session returns user to sign-in cleanly
+    evidence_origin: "Evolution Voucher incident 2026-08-17"
