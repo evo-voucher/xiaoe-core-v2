@@ -1,13 +1,32 @@
 # XiaoE Stability-First Engineering Discipline
 
 Status: ACTIVE HARD RULE
-Scope: All XiaoE technical work, especially production systems, databases, Auth, permissions, migrations, deployments, and integrations.
+Scope: All XiaoE technical work, especially production systems, databases, Auth, permissions, migrations, deployments, integrations, and future XiaoE architecture rewrites or optimizations.
 
 ## Core Principle
 
 `Stability before speed. Stability before cleverness. Stability before cosmetic optimization.`
 
 XiaoE must prefer the smallest correct change that preserves verified behavior, data integrity, access boundaries, recoverability, and operational continuity.
+
+## Stability Without Loss of Openness
+
+Any future XiaoE architecture rewrite, optimization, simplification, migration, or major internal redesign must satisfy both goals at the same time:
+
+1. increase or preserve system stability; and
+2. preserve openness for future extension, provider replacement, module evolution, configuration changes, and new verified use cases.
+
+Stability must not be achieved by hard-coding the system into one provider, one workflow, one project, one business rule, or one technical path when a clean abstraction or configurable boundary can preserve flexibility safely.
+
+Openness must not be used as an excuse for uncontrolled complexity, speculative abstractions, parallel architectures, or unstable dependencies.
+
+The target is:
+`Stable Core + Open Edges`.
+
+A proposed architecture optimization is incomplete if it makes the system more stable by unnecessarily reducing replaceability, extensibility, modularity, or future choice. It is also incomplete if it increases openness while making runtime behavior, ownership, permissions, data flow, or recovery less predictable.
+
+Decision rule:
+`More stable, no unnecessary loss of openness.`
 
 ## Default Decision Order
 
@@ -31,6 +50,7 @@ XiaoE must prefer the smallest correct change that preserves verified behavior, 
 - If a proposed change creates more uncertainty than the problem it solves, do not execute it yet.
 - Production stability outranks cleanup aesthetics and architecture purity.
 - Stability does not mean preserving bad architecture forever. Root-cause corrections are still required, but they must be introduced through controlled, testable, reversible migration rather than disruption.
+- Architecture rewrites must preserve clean extension paths and replaceable boundaries unless there is verified reason to remove them.
 
 ## Stability Gate
 
@@ -43,6 +63,7 @@ Before executing a meaningful production change, XiaoE must be able to answer:
 5. What data, permission, Auth, or business flow could be affected?
 6. What is the rollback or recovery path?
 7. How will success be verified after the change?
+8. Does this change preserve necessary openness and future replaceability?
 
 If these cannot be answered with sufficient evidence, pause the mutation and continue diagnosis.
 
@@ -109,7 +130,7 @@ If a temporary patch becomes permanent by accident, treat it as technical debt r
 
 ## Stability Decision Test
 
-`Will this change make the system more predictable without unnecessarily increasing the number of moving parts?`
+`Will this change make the system more predictable without unnecessarily increasing the number of moving parts, while preserving useful future choice?`
 
 If no, the change should be reconsidered.
 
@@ -122,9 +143,10 @@ This discipline works together with:
 - No Patch-Driven Development
 - Preserve-Before-Rebuild Engineering Discipline
 - Free-First Cost and Resource Discipline
+- Modular / Configurable / Provider-Agnostic Design
 
-When these principles appear to conflict, prefer the option that preserves verified business continuity and data integrity while still removing the proven root cause.
+When these principles appear to conflict, prefer the option that preserves verified business continuity and data integrity while still removing the proven root cause and retaining useful openness.
 
 ## Target State
 
-`Stable -> understandable -> reproducible -> maintainable -> then optimized.`
+`Stable core -> understandable -> reproducible -> maintainable -> open edges -> then optimized.`
