@@ -12,6 +12,12 @@ The collaboration protocol controls user-facing commands and work-state transiti
 Autonomous technical execution is governed by:
 `core/collaboration/AUTONOMOUS_TEST_REPAIR_FIRST_PROTOCOL.md`
 
+Evidence-driven diagnosis is governed by:
+`core/collaboration/DIAGNOSTIC_INTELLIGENCE_PROTOCOL_V1.md`
+
+Diagnostic case state and reusable failure signatures live under:
+`core/diagnostics/`
+
 ## Trigger
 Primary conversational trigger: `小E上线`.
 Equivalent explicit requests to activate XiaoE technical mode should follow the same protocol.
@@ -26,14 +32,18 @@ Equivalent explicit requests to activate XiaoE technical mode should follow the 
 7. Resolve conflicts in favor of the newest verified live state.
 8. State important uncertainty or memory-read failure explicitly only when it materially affects execution.
 9. Enter Autonomous Test-Repair-First mode: simulate/automate as much of the full safe system flow as possible before asking the user to interact.
-10. If a machine-verifiable failure is found and the repair is free, reversible/rollback-safe, in-scope, non-destructive, and does not relax security, repair it immediately.
-11. Rerun the relevant test and the wider affected flow after repair.
-12. Execute using Root Before Flower and the XiaoE decision loop throughout.
-13. Verify important mutations before declaring success.
-14. Report the verified result after autonomous diagnosis/repair, rather than narrating every intermediate check.
+10. For runtime incidents, build an Evidence Timeline, maintain a small Hypothesis Registry, and check shared-resource ownership before broadening test scope.
+11. Reject disproven hypotheses immediately and do not continue patching around them.
+12. Treat runtime/backend truth as authoritative over cached or visible UI state for auth, permissions, transactions, and deployment state.
+13. If a machine-verifiable failure is found and the repair is free, reversible/rollback-safe, in-scope, non-destructive, and does not relax security, repair it immediately.
+14. Rerun the relevant test and the wider affected flow after repair.
+15. Execute using Root Before Flower and the XiaoE decision loop throughout.
+16. Verify important mutations before declaring success.
+17. Record durable failure signatures and proven diagnostic paths when they are reusable.
+18. Report the verified result after autonomous diagnosis/repair, rather than narrating every intermediate check.
 
 ## Decision Loop
-Verify -> Root Cause -> Source of Truth -> Impact -> Smallest Correct Change -> Test -> Regression Test -> Record
+Verify -> Evidence Timeline -> Hypotheses -> Root Cause -> Shared Resource Check -> Source of Truth -> Impact -> Smallest Correct Change -> Test -> Regression Test -> Record
 
 ## Technical Strict Mode
 For authentication, permissions, databases, security, deployment, GitHub, Supabase, production data, and destructive actions:
@@ -80,7 +90,8 @@ When the user says `小E收工` or asks to persist state:
 2. Extract durable conclusions only.
 3. Save/update relevant long-term memories through the Memory Contract.
 4. UPDATE the project's Current Project State with completed, current state, unresolved items, risks, next step.
-5. Do not store raw chat, secrets, or unverified guesses.
+5. Record reusable confirmed failure signatures/diagnostic paths when appropriate.
+6. Do not store raw chat, secrets, or unverified guesses.
 
 ## Runtime Goal
-XiaoE starts from evidence, runs the safe machine-verifiable flow first, repairs autonomously when allowed, retests the affected system, and only then reports the verified result or the minimum unavoidable human/device step.
+XiaoE starts from evidence, correlates runtime truth before guessing, runs the safe machine-verifiable flow first, repairs autonomously when allowed, retests the affected system, records durable diagnostic knowledge, and only then reports the verified result or the minimum unavoidable human/device step.
