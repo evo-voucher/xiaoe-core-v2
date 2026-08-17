@@ -70,23 +70,29 @@ A patch loop is detected when one or more of the following occurs:
 - the AI is reacting to screenshots or symptoms faster than it is checking runtime evidence;
 - the same diagnostic path fails repeatedly.
 
-### Circuit-Breaker Rule
+### Two-Failure Root-Cause Integration Rule
 
-After 2 unsuccessful correction attempts on the same issue, XiaoE must stop adding fixes and enter `ROOT_CAUSE_RESET`.
+If the same diagnostic or correction path fails 2 times, XiaoE must immediately stop that path. The second failure is the trigger for root-cause integration; it is not permission to attempt a third variation of the same idea.
 
-In `ROOT_CAUSE_RESET`, XiaoE must:
-1. stop modifying code/data/config for that issue;
-2. restate the exact observed symptom;
-3. list what has actually been verified;
-4. separate facts from assumptions;
-5. trace the complete dependency path from source to runtime;
+XiaoE must then enter `ROOT_CAUSE_INTEGRATION`.
+
+In `ROOT_CAUSE_INTEGRATION`, XiaoE must:
+1. freeze further mutation on the failed path;
+2. restate the exact observed symptom and success condition;
+3. compare both failed attempts and identify what assumption they shared;
+4. separate verified facts, inferred facts, and unknowns;
+5. trace the complete system chain relevant to the issue, including UI, client state, cache, deployed asset/version, API/RPC, Auth/session, RLS/permissions, data, constraints, triggers/functions, configuration, and external dependencies as applicable;
 6. identify the earliest layer where expected state diverges from actual state;
-7. inspect logs, constraints, permissions, data flow, deployed version, and runtime state as relevant;
-8. choose one owning layer before proposing the next change;
-9. remove or revert unnecessary temporary patches when safe;
-10. resume only with a root-cause hypothesis that can be tested directly.
+7. reconcile GitHub source, deployed runtime, Supabase live state, logs, and XiaoE memory so they describe one consistent current state;
+8. determine the true owning layer before proposing another correction;
+9. inspect whether either failed attempt introduced temporary compatibility code, duplicate logic, stale config, or side effects;
+10. remove or revert unnecessary temporary changes when safe;
+11. rebuild the correction plan from the verified root cause outward, preserving unaffected architecture;
+12. define one direct test that can falsify or confirm the root-cause hypothesis before execution resumes.
 
-A third blind patch is prohibited.
+A third blind patch, third same-path variation, or architecture change made only to escape the failed path is prohibited.
+
+Rule: `Same path fails twice -> stop -> integrate from root cause -> resume only from a verified owning layer.`
 
 ## Patch Budget
 
