@@ -1,0 +1,53 @@
+schema_version: 1
+purpose: Lightweight runtime structure for XiaoE technical diagnosis.
+
+case:
+  id: string
+  project: string
+  issue_summary: string
+  user_visible_time: null
+  timezone: null
+  fault_path: []
+
+  evidence_timeline:
+    - time: null
+      source: null
+      event: null
+      confidence: verified
+      reference: null
+
+  hypotheses:
+    - id: H1
+      statement: null
+      status: unresolved   # unresolved | supported | confirmed | rejected
+      evidence_for: []
+      evidence_against: []
+
+  shared_resources_checked:
+    - resource: null
+      owner_layer: null
+      shared_by: []
+      finding: null
+
+  root_cause:
+    status: unresolved
+    owner_layer: null
+    statement: null
+    evidence: []
+
+  repair:
+    class: null
+    changed_paths: []
+    rollback: null
+
+  verification:
+    level: null   # L1 | L2 | L3 | L4
+    path: []
+    result: null  # PASS | FAIL | BLOCKED
+    evidence: []
+
+  durable_pattern_candidate:
+    create: false
+    signature: null
+    diagnostic_path: []
+    avoid: []
