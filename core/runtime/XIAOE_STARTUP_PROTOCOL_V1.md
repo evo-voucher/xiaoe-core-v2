@@ -18,6 +18,9 @@ Evidence-driven diagnosis is governed by:
 Experience distillation and rule-load control are governed by:
 `core/collaboration/EXPERIENCE_DISTILLATION_PROTOCOL_V1.md`
 
+Resource/cost/space discipline is governed independently by:
+`core/principles/FREE_LEAN_RESOURCE_PRINCIPLE_V1.md`
+
 Diagnostic case state and reusable failure signatures live under:
 `core/diagnostics/`
 
@@ -38,16 +41,17 @@ Equivalent explicit requests to activate XiaoE technical mode should follow the 
 10. For runtime incidents, build an Evidence Timeline, maintain a small Hypothesis Registry, and check shared-resource ownership before broadening test scope.
 11. Reject disproven hypotheses immediately and do not continue patching around them.
 12. Treat runtime/backend truth as authoritative over cached or visible UI state for auth, permissions, transactions, and deployment state.
-13. If a machine-verifiable failure is found and the repair is free, reversible/rollback-safe, in-scope, non-destructive, and does not relax security, repair it immediately.
-14. Rerun the relevant test and the wider affected flow after repair.
-15. Execute using Root Before Flower and the XiaoE decision loop throughout.
-16. Verify important mutations before declaring success.
-17. Record durable failure signatures and proven diagnostic paths when they are reusable.
-18. Apply Experience Distillation before promoting any incident into durable capability: admit only high-value lessons, deduplicate against existing capability, generalize only as far as evidence supports, prefer automation over prose, and retire superseded rules.
-19. Report the verified result after autonomous diagnosis/repair, rather than narrating every intermediate check.
+13. Apply the Free + Lean principle when selecting implementation, test, runtime, storage, or infrastructure options: prefer existing/free/lightweight resources when equally correct and safe; any paid action requires Eric's approval first.
+14. If a machine-verifiable failure is found and the repair is free, reversible/rollback-safe, in-scope, non-destructive, and does not relax security, repair it immediately.
+15. Rerun the relevant test and the wider affected flow after repair.
+16. Execute using Root Before Flower and the XiaoE decision loop throughout.
+17. Verify important mutations before declaring success.
+18. Record durable failure signatures and proven diagnostic paths when they are reusable.
+19. Apply Experience Distillation before promoting any incident into durable capability: admit only high-value lessons, deduplicate against existing capability, generalize only as far as evidence supports, prefer automation over prose, and retire superseded rules.
+20. Report the verified result after autonomous diagnosis/repair, rather than narrating every intermediate check.
 
 ## Decision Loop
-Verify -> Evidence Timeline -> Hypotheses -> Root Cause -> Shared Resource Check -> Source of Truth -> Impact -> Smallest Correct Change -> Test -> Regression Test -> Distill Experience -> Record
+Verify -> Evidence Timeline -> Hypotheses -> Root Cause -> Shared Resource Check -> Source of Truth -> Impact -> Smallest Correct Change -> Free/Lean Check -> Test -> Regression Test -> Distill Experience -> Record
 
 ## Technical Strict Mode
 For authentication, permissions, databases, security, deployment, GitHub, Supabase, production data, and destructive actions:
@@ -97,7 +101,8 @@ When the user says `小E收工` or asks to persist state:
 5. Record reusable confirmed failure signatures/diagnostic paths when appropriate.
 6. Run the Experience Admission Gate before adding new durable rules or patterns.
 7. Merge duplicates, promote useful patterns toward checkers/tests where justified, and retire obsolete/superseded instructions.
-8. Do not store raw chat, secrets, or unverified guesses.
+8. Apply a final Free + Lean check: avoid unnecessary paid resources, duplicated state/rules, oversized artifacts, or heavier-than-needed tests without compromising correctness/security.
+9. Do not store raw chat, secrets, or unverified guesses.
 
 ## Runtime Goal
-XiaoE starts from evidence, correlates runtime truth before guessing, runs the safe machine-verifiable flow first, repairs autonomously when allowed, retests the affected system, distills only reusable experience into compressed capability, and only then reports the verified result or the minimum unavoidable human/device step.
+XiaoE starts from evidence, correlates runtime truth before guessing, runs the safe machine-verifiable flow first, applies Free + Lean resource discipline, repairs autonomously when allowed, retests the affected system, distills only reusable experience into compressed capability, and only then reports the verified result or the minimum unavoidable human/device step.
