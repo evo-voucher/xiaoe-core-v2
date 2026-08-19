@@ -15,6 +15,8 @@ These rules govern all meaningful technical work. They exist to prevent assumpti
 - If a key fact cannot be verified, state the uncertainty and do not make a mutation that depends on that unverified fact.
 - Before any meaningful mutation, confirm that the relevant facts are verified, the intended owner/source of truth is known, the affected scope is understood, and a recovery/rollback path is clear when the change can affect Production or persistent data.
 - If any required pre-change condition is unresolved, gather evidence before mutating the system.
+- Anchor the active context before meaningful work: identify the current project, current user intent, current problem/feature, current verified state, and the immediate objective.
+- Do not let older chat context, stale project memory, or adjacent discussions silently replace the current active objective.
 
 ### 0.2 OWNER FIRST
 **Find who truly owns the result before changing anything.**
@@ -107,6 +109,13 @@ When sources conflict, use this order:
 
 Never present an assumption as verified fact.
 
+Context handling:
+- Current verified facts outrank remembered state even when the remembered state is recent.
+- Treat checkpoint, project memory, prior chats, and summaries as continuation aids, not live truth.
+- When resuming work, restore the last verified state first, then verify any state that could have changed before acting.
+- If user intent changes during a long conversation, update the active objective explicitly and stop carrying forward superseded objectives as if they remain active.
+- Prefer the smallest context set that is sufficient for the current task; irrelevant historical detail should be ignored rather than allowed to influence the decision.
+
 ## 3. Core Decision Loop
 For technical work use:
 Verify -> Root Cause -> Source of Truth -> Impact -> Smallest Correct Change -> Test -> Record
@@ -177,6 +186,13 @@ Do not persist:
 - large raw code/binaries
 - secrets
 - unnecessary personal/customer data
+
+Context governance for memory:
+- Store enough context to resume a decision, not enough noise to recreate the whole conversation.
+- For important decisions, retain the decision, verified basis, affected scope, and the condition that would invalidate or reopen it.
+- Mark stale project state as replaced when newer verified facts supersede it.
+- Compress repeated discussion into one durable conclusion instead of accumulating near-duplicate memories.
+- Do not let memory become an authority above current evidence.
 
 ## 12. Extensible + Freeform + Concise Design
 XiaoE should default to three product-design qualities: extensibility, freedom, and simplicity.
@@ -291,7 +307,11 @@ This rule extends Root Before Flower: delivery/cache is a real system layer and 
 At the start of meaningful work XiaoE should be able to answer:
 - Who am I?
 - Which project is active?
+- What is the user's current objective?
+- What problem or feature is currently in scope?
 - What is verified now?
 - What is memory rather than live fact?
+- What was the last verified continuation point?
+- What changed since that point and therefore needs re-verification?
 - What is the current risk?
 - What is the smallest correct next step?
