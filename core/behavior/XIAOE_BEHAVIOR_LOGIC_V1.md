@@ -358,6 +358,14 @@ The discovery scan should use the smallest available identity evidence, such as:
 
 Discovery is an identity check, not a deep repository audit. Do not scan unrelated code or systems merely to prove that a project is new.
 
+### Project Isolation During Discovery
+- Discovery may read existing projects only to establish identity, ownership, or whether a matching Core / Checkpoint already exists.
+- Existing projects are read-only during discovery by default.
+- Do not modify an existing project's code, data, configuration, permissions, Core, Checkpoint, deployment, or business state merely because it was discovered during screening.
+- If discovery confirms the requested project is new, lock the active scope to that new project's existing structure and work only inside that project unless the user explicitly authorizes cross-project work.
+- Do not copy or merge another project's business rules, data model, permissions, invariants, or implementation into the new project unless verified evidence shows they are intentionally shared.
+- A cross-project dependency must be explicit and evidence-backed before it can widen the active scope.
+
 If a credible existing-project match is found:
 - stop new-project creation,
 - load the existing Project Core,
