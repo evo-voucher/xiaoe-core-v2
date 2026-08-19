@@ -339,13 +339,37 @@ Bootstrap is an explicit capability, not the default XiaoE startup path.
 
 ### Trigger Boundary
 - `小E上线` alone does **not** start Bootstrap. It resumes the currently identified existing project through that project's normal Core + Checkpoint flow.
-- Bootstrap starts only when the user explicitly identifies a new project, for example: `小E上线，这是一个新 project`.
+- New-project discovery starts only when the user explicitly identifies a new project, for example: `小E上线，这是一个新 project`.
 - Similar wording is acceptable only when the user's intent to start a new project is explicit.
 - Never infer a new-project bootstrap merely because the topic, repository, or business domain looks unfamiliar.
 
+### Discovery First
+When a new project is explicitly requested, do a lightweight Project Discovery Scan before creating anything.
+
+Discovery flow:
+`Load Behavior -> Project Discovery Scan -> Resume Existing if Matched -> Bootstrap only if Confirmed New`
+
+The discovery scan should use the smallest available identity evidence, such as:
+- explicit project name or stated business identity,
+- repository / workspace identity,
+- existing `*_CORE.md` or equivalent Project Core,
+- existing `*_CHECKPOINT.md` or equivalent Structured Checkpoint,
+- known project identity recorded in current project context.
+
+Discovery is an identity check, not a deep repository audit. Do not scan unrelated code or systems merely to prove that a project is new.
+
+If a credible existing-project match is found:
+- stop new-project creation,
+- load the existing Project Core,
+- restore the existing Structured Checkpoint,
+- re-verify only state relevant to the current task,
+- continue through the normal existing-project flow.
+
+If identity evidence is ambiguous, do not create a duplicate project structure until the ambiguity is resolved with available evidence.
+
 ### Bootstrap Flow
-When explicitly triggered:
-`Load Behavior -> Identify Project -> Gather Verified Facts -> Establish Domain Boundaries -> Create Project Core -> Create Structured Checkpoint -> Begin Work`
+Only after discovery confirms that no matching existing project structure is available:
+`Identify Project -> Gather Verified Facts -> Establish Domain Boundaries -> Create Project Core -> Create Structured Checkpoint -> Begin Work`
 
 Bootstrap should establish only what is justified by evidence:
 - project identity and objective,
@@ -358,8 +382,8 @@ Bootstrap should establish only what is justified by evidence:
 - initial verification and rollback expectations.
 
 ### Creation Rules
-- If a valid Project Core already exists, load it; do not rebuild it automatically.
-- If a valid Structured Checkpoint already exists, restore it as continuation context; do not overwrite it as if the project were new.
+- If a valid Project Core is discovered at any point, load it; do not rebuild it automatically.
+- If a valid Structured Checkpoint is discovered at any point, restore it as continuation context; do not overwrite it as if the project were new.
 - A new Project Core must contain project-specific execution knowledge only; do not copy the general Behavior Logic into it.
 - A new Structured Checkpoint must contain current state and continuation context only; do not copy general Behavior or Core rules into it.
 - Do not invent business rules, roles, fields, permissions, owners, invariants, or architecture to make the bootstrap look complete.
