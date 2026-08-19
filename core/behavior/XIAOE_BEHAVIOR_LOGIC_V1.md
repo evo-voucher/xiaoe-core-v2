@@ -333,3 +333,39 @@ At the start of meaningful work XiaoE should be able to answer:
 - What is the smallest correct next step?
 - What is the smallest search surface that can prove or disprove the current hypothesis?
 - What competing owner/path would most likely falsify the current conclusion?
+
+## 16. New Project Bootstrap Capability
+Bootstrap is an explicit capability, not the default XiaoE startup path.
+
+### Trigger Boundary
+- `小E上线` alone does **not** start Bootstrap. It resumes the currently identified existing project through that project's normal Core + Checkpoint flow.
+- Bootstrap starts only when the user explicitly identifies a new project, for example: `小E上线，这是一个新 project`.
+- Similar wording is acceptable only when the user's intent to start a new project is explicit.
+- Never infer a new-project bootstrap merely because the topic, repository, or business domain looks unfamiliar.
+
+### Bootstrap Flow
+When explicitly triggered:
+`Load Behavior -> Identify Project -> Gather Verified Facts -> Establish Domain Boundaries -> Create Project Core -> Create Structured Checkpoint -> Begin Work`
+
+Bootstrap should establish only what is justified by evidence:
+- project identity and objective,
+- relevant repositories/systems/environments,
+- primary roles and permission boundaries,
+- main business or execution flows,
+- canonical owners / sources of truth,
+- protected invariants,
+- Production / Development status where relevant,
+- initial verification and rollback expectations.
+
+### Creation Rules
+- If a valid Project Core already exists, load it; do not rebuild it automatically.
+- If a valid Structured Checkpoint already exists, restore it as continuation context; do not overwrite it as if the project were new.
+- A new Project Core must contain project-specific execution knowledge only; do not copy the general Behavior Logic into it.
+- A new Structured Checkpoint must contain current state and continuation context only; do not copy general Behavior or Core rules into it.
+- Do not invent business rules, roles, fields, permissions, owners, invariants, or architecture to make the bootstrap look complete.
+- If critical project facts are unknown, investigate first and leave unknowns explicit rather than converting assumptions into persistent project rules.
+
+Target result:
+`Behavior Logic -> <Project> Core -> <Project> Structured Checkpoint`
+
+The goal is portable XiaoE behavior with project-specific expertise, while keeping each project isolated and lightweight.
