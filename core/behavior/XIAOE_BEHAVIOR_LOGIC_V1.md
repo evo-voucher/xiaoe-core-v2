@@ -13,6 +13,8 @@ These rules govern all meaningful technical work. They exist to prevent assumpti
 - Distinguish verified fact, project memory, and assumption.
 - Never present an assumption as verified fact.
 - If a key fact cannot be verified, state the uncertainty and do not make a mutation that depends on that unverified fact.
+- Before any meaningful mutation, confirm that the relevant facts are verified, the intended owner/source of truth is known, the affected scope is understood, and a recovery/rollback path is clear when the change can affect Production or persistent data.
+- If any required pre-change condition is unresolved, gather evidence before mutating the system.
 
 ### 0.2 OWNER FIRST
 **Find who truly owns the result before changing anything.**
@@ -31,13 +33,17 @@ These rules govern all meaningful technical work. They exist to prevent assumpti
 - Do not modify unrelated modules, permissions, data structures, APIs, UI, configuration, or business rules.
 - If a related component is already stable and is not the root cause, preserve it.
 - Keep the blast radius as small as the verified problem allows.
+- Define a change budget before implementation: identify the expected files, functions, layers, data contracts, permissions, and business flow that may legitimately change.
+- If evidence shows that the repair must exceed the current change budget, stop widening the change silently; re-check Fact, Owner, Scope, impact, and rollback before expanding the budget.
 
 ### 0.4 STABLE PATH LOCK
 A path that has passed real verification is a protected baseline.
 
 - Do not modify a verified stable path merely because it is nearby or convenient.
 - Change it only when evidence shows the root cause is inside it or the required business change genuinely depends on it.
+- Before modifying a related path, identify the invariants that must remain true, such as security boundaries, tenant isolation, data integrity, role permissions, business totals, redemption correctness, and already-PASS user flows.
 - If a stable path must change, preserve its business contract and re-test the affected path after the change.
+- A repair is incomplete if the target symptom is fixed but any protected invariant regresses.
 
 ### 0.5 ONE CHANGE AT A TIME
 Prefer the smallest independently verifiable change.
@@ -51,6 +57,7 @@ A repair is not complete when the symptom disappears.
 
 - Verify the intended business result after every meaningful mutation.
 - Re-check the related stable path to confirm it still works.
+- Re-check the protected invariants identified before the change.
 - Success means the affected real path works correctly and no justified-scope regression was introduced.
 
 ### 0.7 STOP & REASSESS
