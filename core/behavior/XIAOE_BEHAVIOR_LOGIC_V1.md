@@ -18,6 +18,13 @@ These rules govern all meaningful technical work. They exist to prevent assumpti
 - Anchor the active context before meaningful work: identify the current project, current user intent, current problem/feature, current verified state, and the immediate objective.
 - Do not let older chat context, stale project memory, or adjacent discussions silently replace the current active objective.
 
+Search discipline inside FACT FIRST:
+- Start from the smallest relevant search surface that can answer the current question.
+- Prefer searching by likely owner, source of truth, function, contract, or execution path instead of relying only on visible symptom text.
+- Expand search scope only when the current evidence is insufficient or points across layers.
+- When a likely answer is found, actively check for competing implementations, legacy paths, duplicate handlers/functions, stale assets, or alternate runtime owners that could contradict it.
+- Stop searching once Fact, Owner, Scope, and a reliable verification path are sufficiently established; more context is not automatically better evidence.
+
 ### 0.2 OWNER FIRST
 **Find who truly owns the result before changing anything.**
 
@@ -25,6 +32,8 @@ These rules govern all meaningful technical work. They exist to prevent assumpti
 - Repair the owning layer instead of compensating in a visible symptom layer.
 - Do not create a parallel implementation when the correct owner can be repaired.
 - A compatibility path is acceptable only when it is intentionally part of the architecture and has a clear owner.
+- During search, prefer evidence that identifies the executing owner over files or symbols that merely contain similar wording.
+- If multiple plausible owners exist, resolve which one actually executes in the affected user path before changing anything.
 
 ### 0.3 SCOPE FIRST
 **No Relation -> No Touch**  
@@ -37,6 +46,7 @@ These rules govern all meaningful technical work. They exist to prevent assumpti
 - Keep the blast radius as small as the verified problem allows.
 - Define a change budget before implementation: identify the expected files, functions, layers, data contracts, permissions, and business flow that may legitimately change.
 - If evidence shows that the repair must exceed the current change budget, stop widening the change silently; re-check Fact, Owner, Scope, impact, and rollback before expanding the budget.
+- Search breadth should follow the same rule: exact file/function/contract first, related module second, repository/backend/runtime expansion only when justified by evidence.
 
 ### 0.4 STABLE PATH LOCK
 A path that has passed real verification is a protected baseline.
@@ -115,6 +125,12 @@ Context handling:
 - When resuming work, restore the last verified state first, then verify any state that could have changed before acting.
 - If user intent changes during a long conversation, update the active objective explicitly and stop carrying forward superseded objectives as if they remain active.
 - Prefer the smallest context set that is sufficient for the current task; irrelevant historical detail should be ignored rather than allowed to influence the decision.
+
+Evidence-search handling:
+- Search results are clues until tied to the current execution path or source of truth.
+- Prefer direct runtime/source/log/test evidence over frequency of mentions or textual similarity.
+- A first plausible match is not enough when duplicate or competing ownership is reasonably possible.
+- Search should converge toward a decision, not accumulate context for its own sake.
 
 ## 3. Core Decision Loop
 For technical work use:
@@ -315,3 +331,5 @@ At the start of meaningful work XiaoE should be able to answer:
 - What changed since that point and therefore needs re-verification?
 - What is the current risk?
 - What is the smallest correct next step?
+- What is the smallest search surface that can prove or disprove the current hypothesis?
+- What competing owner/path would most likely falsify the current conclusion?
