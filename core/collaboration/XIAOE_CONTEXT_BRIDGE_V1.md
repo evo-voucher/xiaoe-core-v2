@@ -15,15 +15,18 @@ It does not redefine:
 Authority remains:
 `Security / factual truth / explicit user intent -> Behavior Logic -> Project Core -> Checkpoint -> current-chat assumptions`
 
-Layer 0 may locate, load, reconcile, and package context. It may never weaken or override a higher-authority rule.
+Layer 0 may locate, load, reconcile, route, and package context. It may never weaken or override a higher-authority rule.
 
 ## 2. Objective
-When Eric says `小E上线`, minimize manual context reconstruction and context loss.
+When Eric says `小E上线`, minimize manual context reconstruction and context loss without making every session perform a deep scan.
 
 Target boot path:
-`Detect Project -> Read Project Manifest -> Load Behavior -> Load Project Core -> Load Checkpoint -> Retrieve relevant Fusion memory when available -> Re-verify changed live facts -> Build Active Context Pack -> Work`
+`Detect Project -> Read Project Manifest -> Load minimum required authority -> Restore relevant continuation -> Classify task depth -> Retrieve relevant context -> Re-verify only changed/risky facts -> Build Active Context Pack -> Work`
 
-The bridge should stop loading once enough trustworthy context exists for the active task.
+The bridge must stop loading once enough trustworthy context exists for the active task.
+
+Primary optimization target:
+`maximum continuity with minimum necessary loading`
 
 ## 3. Project Manifest Contract
 A XiaoE-enabled project should expose a small root manifest named:
@@ -52,14 +55,16 @@ It must not contain secrets, service-role keys, passwords, JWTs, customer-sensit
 ### Existing XiaoE-enabled project
 If `xiaoe.project.json` exists and points to valid Layer 1/2/3 sources:
 1. load the manifest,
-2. load the declared Layer 1/2/3 sources,
-3. restore the checkpoint as continuation context only,
-4. retrieve only relevant Fusion memory when needed,
-5. re-verify state that may have changed,
-6. construct the Active Context Pack,
-7. begin the smallest justified work path.
+2. load only the authority needed to safely operate,
+3. restore checkpoint continuation context only when relevant,
+4. classify the active task depth,
+5. retrieve only relevant Fusion memory when needed,
+6. re-verify only state that may have changed or matters to the task,
+7. construct the Active Context Pack,
+8. begin the smallest justified work path.
 
 Do not bootstrap again merely because the conversation is new.
+Do not reload unchanged project context merely because a new user turn arrived.
 
 ### New / non-bootstrap project
 If the manifest is absent:
@@ -72,11 +77,91 @@ If the manifest is absent:
 
 Manifest absence alone does not prove the project itself is empty.
 
-## 5. Active Context Pack
+## 5. Runtime Context Controller
+Layer 0 contains an adaptive Runtime Context Controller. This is not a new layer, memory system, or policy authority. It is the routing logic that decides how much context and verification are needed for the current task.
+
+### 5.1 Work depth
+Classify each task into the lightest sufficient mode.
+
+#### FAST
+Use for low-risk, local, non-authoritative work such as:
+- wording and copy,
+- UI placement discussion,
+- explanation of already verified behavior,
+- local presentation-only changes,
+- questions answerable from current trusted context.
+
+FAST behavior:
+- reuse current project identity,
+- avoid unnecessary GitHub/Supabase/runtime reads,
+- load no Fusion memory unless directly relevant,
+- verify only if the answer depends on a fact that may have changed.
+
+#### FOCUSED
+Use for one bounded functional path such as:
+- a button not responding,
+- one report showing the wrong value,
+- one export path,
+- one frontend-to-RPC mismatch,
+- one scoped production defect.
+
+FOCUSED behavior:
+- identify authoritative owner,
+- inspect only the relevant code/data/runtime path,
+- trace root cause before change,
+- verify the smallest affected path after change,
+- preserve unrelated stable paths.
+
+#### DEEP
+Use for high-impact or cross-layer tasks such as:
+- Production stability audits,
+- Auth/RLS/tenant isolation,
+- database migrations,
+- redemption integrity,
+- duplicate/irreversible writes,
+- environment routing,
+- cross-project or cross-role behavior,
+- release gates or rollback decisions.
+
+DEEP behavior:
+- load all materially relevant authority and environment contracts,
+- verify live state across the affected layers,
+- inspect recovery/rollback path before mutation,
+- use the project-required higher verification level,
+- do not infer green status from stale checkpoint or source state alone.
+
+### 5.2 Escalation rule
+Start at the lightest reasonable mode and escalate only when evidence requires it.
+
+`FAST -> FOCUSED -> DEEP`
+
+Escalate when:
+- the root cause crosses layers,
+- permissions or tenant boundaries are involved,
+- persistent data may change,
+- source and runtime disagree,
+- the task affects Production release state,
+- confidence is insufficient for the intended mutation.
+
+Do not de-escalate merely to save time when risk requires deeper verification.
+
+### 5.3 Context budget
+Layer 0 should keep a practical context budget:
+- load locators before large documents,
+- reuse already verified context in the same work session,
+- prefer targeted reads over whole-repository scans,
+- prefer exact owner paths over broad search once ownership is known,
+- avoid duplicate retrieval from multiple sources unless conflict checking is required,
+- discard temporary debugging detail after the task is resolved.
+
+Slow boot caused by unnecessary context loading is a Layer 0 defect.
+
+## 6. Active Context Pack
 The bridge should build a compact working packet using the existing Memory Fusion / Task Context Pack model rather than creating a second memory system.
 
 Recommended fields:
 - active project
+- task depth: FAST / FOCUSED / DEEP
 - user objective
 - verified current state
 - remembered-but-not-live state
@@ -88,10 +173,30 @@ Recommended fields:
 - minimum verification level
 - unresolved conflict or uncertainty
 - next smallest action
+- completion proof required
 
 The Active Context Pack is temporary working context. It is not durable memory by default.
 
-## 6. Live Verification Rule
+The pack should be compact enough that the active reasoning engine can immediately answer:
+`what are we doing, what is true, what owns it, what can break, and what is the next safe action?`
+
+## 7. Project Identity Cross-Check
+Project identity should be resolved with the least expensive trustworthy evidence.
+
+Preferred order:
+1. explicit current project/repository context,
+2. valid `xiaoe.project.json`,
+3. repository identity and declared project sources,
+4. environment contract when the task is environment-sensitive,
+5. checkpoint continuation context.
+
+For ordinary work, a valid manifest is sufficient to identify the project.
+For environment-sensitive or Production work, cross-check the relevant environment/project identity before mutation.
+
+Do not treat a familiar conversation topic as proof of active project identity.
+Do not treat a valid project manifest as proof that the currently executed runtime matches Production.
+
+## 8. Live Verification Rule
 Layer 0 must preserve the existing evidence hierarchy:
 `live verified source > current GitHub/Supabase/log/test evidence > XiaoE project memory > stable user memory > chat assumption`
 
@@ -99,26 +204,83 @@ A successful load is not a successful verification.
 A checkpoint is not live truth.
 A Git commit is not proof that the user's device executed the new runtime.
 
-## 7. Relationship to Memory Fusion v3
+### Verification triggers
+Re-verify when the task depends on:
+- data that may have changed since checkpoint,
+- current Production behavior,
+- Auth/RLS/permissions,
+- deployment or asset delivery,
+- current schema/RPC availability,
+- current branch/commit identity,
+- external dependency availability,
+- user-visible runtime behavior after a change.
+
+Do not re-verify stable unrelated facts just because another part of the system changed.
+
+## 9. Tool Routing
+Layer 0 chooses tools by source ownership, not convenience.
+
+Examples:
+- GitHub owns repository source, commit, workflow, and versioned project rules.
+- Supabase owns current database schema/function/data state when connected.
+- runtime/device confirmation owns whether the user's actual client executed the new behavior.
+- XiaoE memory/checkpoint owns continuation context, not transaction truth.
+
+When one authoritative source can answer the question, avoid querying multiple lower-value sources.
+When sources conflict, pause mutation and resolve the conflict using the evidence hierarchy.
+
+## 10. Root-Cause Continuation
+For defect work, Layer 0 should preserve a compact diagnostic chain across turns:
+`symptom -> broken path -> authoritative owner -> verified cause -> smallest correct change -> required proof`
+
+Once this chain is verified, `继续` should resume from the last verified point rather than restarting discovery.
+
+If a new fact invalidates the chain, discard the invalid assumption and re-enter diagnosis at the earliest affected step.
+
+## 11. Completion Proof
+Before declaring a task complete, Layer 0 should know what proof is sufficient for that task depth.
+
+FAST:
+- source/logic confirmation may be enough for local non-runtime work.
+
+FOCUSED:
+- targeted source/data/runtime verification for the affected path.
+
+DEEP:
+- project-required release/security/integrity verification and rollback readiness when applicable.
+
+Completion language must distinguish:
+- implemented,
+- deployed,
+- source-verified,
+- runtime-verified,
+- user-confirmed,
+- fully green.
+
+Never upgrade one proof type into another.
+
+## 12. Relationship to Memory Fusion v3
 Layer 0 reuses, and does not duplicate, the existing Fusion Retrieve architecture:
 `Intent -> Retrieval -> Conflict Scan -> Task Context Pack -> AI Brain -> Tools -> Verification -> Write-back`
 
 Context Bridge responsibilities are limited to:
 - project detection,
 - source location,
+- adaptive work-depth selection,
 - boot sequencing,
 - context assembly,
+- tool routing,
 - handoff to the reasoning engine.
 
 Memory ranking, conflict rules, write-back policy, and memory security remain owned by the existing memory architecture.
 
-## 8. Provider Boundary
+## 13. Provider Boundary
 ChatGPT is currently XiaoE's primary interaction surface and reasoning engine, but Layer 0 must not bind XiaoE identity to one provider.
 
 The bridge passes prepared context to the active approved reasoning provider.
 The provider must not become the authority for XiaoE identity, persistent memory, project truth, or business transaction truth.
 
-## 9. Finish / Write-back
+## 14. Finish / Write-back
 On `小E收工`:
 1. verify important mutations,
 2. update the project's existing checkpoint/current project state,
@@ -128,7 +290,7 @@ On `小E收工`:
 
 Layer 0 does not introduce a second checkpoint format.
 
-## 10. Safety Boundary
+## 15. Safety Boundary
 Layer 0 is intentionally low-impact.
 It must not automatically:
 - modify business code merely to establish context,
@@ -136,21 +298,26 @@ It must not automatically:
 - change Auth/RLS/permissions,
 - rotate credentials,
 - change deployment targets,
-- overwrite an existing project's XiaoE rules,
+- overwrite an existing project's Layer 1/2/3 rules,
 - rebuild a project.
 
 When screening reveals existing XiaoE integration or competing manifests, resolve ownership before mutation.
 
-## 11. Success Standard
+## 16. Success Standard
 Layer 0 is working when, after `小E上线`, the reasoning engine can answer with verified confidence:
 - Which project is active?
 - Is it already bootstrapped?
 - Where are Layer 1, Layer 2, and Layer 3?
+- What task depth is sufficient?
 - What is the user's current objective?
 - What is verified now versus remembered?
 - What owner/path is in scope?
 - What must remain protected?
+- What does completion require?
 - What is the smallest correct next action?
 
 Target behavior:
-`One command -> correct project context -> minimum necessary re-verification -> immediate safe continuation.`
+`One command -> correct project context -> lightest sufficient work depth -> minimum necessary re-verification -> immediate safe continuation.`
+
+Performance target:
+`FAST should feel nearly immediate; FOCUSED should inspect only the affected path; DEEP should be slow only when risk justifies it.`
