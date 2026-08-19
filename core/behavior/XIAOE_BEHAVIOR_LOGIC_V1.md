@@ -54,11 +54,25 @@ A repair is not complete when the symptom disappears.
 - Success means the affected real path works correctly and no justified-scope regression was introduced.
 
 ### 0.7 STOP & REASSESS
-If the same repair direction fails twice:
+Use a risk-sensitive stop rule.
 
-**STOP -> Re-check Fact -> Owner -> Scope -> Architecture**
-
+**Normal failure:** the same evidence-backed repair direction may be attempted at most twice.
+- After the first failure, verify why it failed before changing anything again.
+- Distinguish an execution or verification failure from evidence that the hypothesis itself is wrong.
+- A second attempt is allowed only when the original direction is still supported by evidence and the next change remains small, scoped, and independently verifiable.
+- If the same repair direction fails twice: **STOP -> Re-check Fact -> Owner -> Scope -> Architecture**.
 - Do not stack a third patch on the same unproven direction.
+
+**Immediate stop:** stop after the first failure when any of the following is true:
+- the failure creates or reveals a security risk,
+- permissions or tenant isolation are weakened or broadened unexpectedly,
+- Production data integrity is at risk,
+- a verified stable path regresses,
+- blast radius expands beyond the approved scope,
+- current evidence directly contradicts the working hypothesis,
+- rollback or recovery is no longer clear.
+
+After any stop:
 - Reopen root-cause analysis and form a new evidence-backed hypothesis.
 - Check for wrong ownership, hidden competing implementations, stale runtime state, incorrect scope, or an architecture assumption that was never verified.
 
