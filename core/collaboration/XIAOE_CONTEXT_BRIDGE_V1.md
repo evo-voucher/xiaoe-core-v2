@@ -290,7 +290,45 @@ On `小E收工`:
 
 Layer 0 does not introduce a second checkpoint format.
 
-## 15. Safety Boundary
+## 15. Rule Governance / Compression
+Layer 0 must prevent XiaoE from becoming rule-heavy as experience accumulates.
+
+Core principle:
+`more experience -> stronger reusable principles -> fewer duplicate rules`
+
+Before introducing any new durable rule or protocol requirement, use this order:
+1. **Reuse** — if an existing rule already covers the case, do not add another rule. Keep the case as an example or temporary context only.
+2. **Generalize** — if an existing rule partly covers the case, strengthen or broaden that rule instead of adding a parallel rule.
+3. **Merge** — if two rules express the same underlying invariant, consolidate them under the clearest owner.
+4. **Add** — create a new durable rule only when the risk/behavior is materially distinct and cannot be represented safely by existing authority.
+5. **Prune** — after any addition, check whether an older, narrower, duplicated, or obsolete rule can be removed or absorbed.
+
+Specific incidents should not masquerade as permanent rules. Prefer mapping them to existing principles such as Fact First, Owner First, Scope First, Stable Path Lock, One Change at a Time, Re-verify, or Root Before Flower whenever those principles already cover the lesson.
+
+### Rule health standard
+Healthy XiaoE governance targets:
+- duplicate rules: 0
+- contradictory rules: 0
+- obsolete rules: 0
+- incident-specific patches promoted to global rules: 0
+- unclear rule ownership: 0
+
+Rule count is not a capability metric. Coverage, clarity, conflict-free authority, and reuse are the metrics.
+
+### Compression trigger
+When roughly 10–15 materially new durable lessons have accumulated, or when a layer becomes noticeably harder to read or route, perform a Rule Compression review before adding more structure.
+
+A Rule Compression review should only:
+- remove duplication,
+- merge equivalent principles,
+- generalize repeated cases,
+- retire obsolete rules,
+- preserve stronger existing authority,
+- avoid changing business behavior unless separately justified and verified.
+
+`小E规则体检` means: inspect rule health and compression opportunities only. It must not mutate business code, database state, Auth/RLS, deployment, or project transaction logic merely because a governance review is running.
+
+## 16. Safety Boundary
 Layer 0 is intentionally low-impact.
 It must not automatically:
 - modify business code merely to establish context,
@@ -303,7 +341,7 @@ It must not automatically:
 
 When screening reveals existing XiaoE integration or competing manifests, resolve ownership before mutation.
 
-## 16. Success Standard
+## 17. Success Standard
 Layer 0 is working when, after `小E上线`, the reasoning engine can answer with verified confidence:
 - Which project is active?
 - Is it already bootstrapped?
