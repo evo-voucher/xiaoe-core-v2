@@ -28,6 +28,8 @@ The bridge must stop loading once enough trustworthy context exists for the acti
 Primary optimization target:
 `maximum continuity with minimum necessary loading`
 
+Layer 0 optimizes reading and routing only; it does not duplicate Layer 1 execution discipline. Reduce unnecessary reads without reducing necessary discipline.
+
 ## 3. Project Manifest Contract
 A XiaoE-enabled project should expose a small root manifest named:
 `xiaoe.project.json`
