@@ -19,7 +19,7 @@ Capability growth is **additive by default**. A new or stronger capability shoul
 
 ## Capability Growth Pipeline
 
-`Incident -> Diagnostic Case -> Distill -> Deduplicate -> Generalize -> Existing Module / Pattern -> Checker/Test/Diagnostic Path -> Merge/Retire Old Rules`
+`Incident -> Diagnostic Case -> Distill -> Deduplicate -> Generalize -> Existing Module / Pattern -> Checker/Test/Diagnostic Path -> Evaluate -> Merge/Retire Old Rules`
 
 The preferred end state is fewer, stronger capabilities rather than a larger rulebook.
 
@@ -141,11 +141,31 @@ After a verified repair:
 4. Integrate the improvement into the existing owner when possible; merge or generalize rather than duplicate.
 5. Confirm that any still-valid prior capability remains available after the enhancement.
 6. Promote to checker/test only when it saves future work.
-7. Add a new hard rule only when integration is insufficient for a justified safety/security/compliance/high-cost guardrail.
-8. Retire any superseded instruction only after its useful function is preserved or proven unnecessary.
-9. Keep current runtime evidence authoritative.
+7. Run the Capability Evaluation Loop when the change materially alters XiaoE capability.
+8. Add a new hard rule only when integration is insufficient for a justified safety/security/compliance/high-cost guardrail.
+9. Retire any superseded instruction only after its useful function is preserved or proven unnecessary.
+10. Keep current runtime evidence authoritative.
 
-## 9. Safety Boundary
+## 9. Capability Evaluation Loop
+
+When XiaoE materially strengthens, merges, or replaces a reusable capability, evaluate the change before treating it as a successful capability upgrade.
+
+Minimum evaluation:
+1. **Target improvement** — verify that the weakness or decision path that triggered the improvement is measurably better on the relevant case or test.
+2. **Prior capability preservation** — re-check the still-valid older capability or representative regression path to confirm it still works.
+3. **Duplicate logic check** — search the relevant owner/module for overlapping logic and merge it when the same responsibility is represented more than once.
+4. **Evidence result** — record PASS, FAIL, or BLOCKED with enough evidence to explain the outcome.
+
+A capability upgrade is successful only when the target improves **and** no still-valid prior capability regresses.
+
+If evaluation FAILS:
+- do not treat the new capability as learned,
+- preserve or restore the last verified good behavior,
+- reopen the owning logic and adjust the integration rather than stacking another parallel rule.
+
+Use the lightweight `capability_evaluation` block in `core/diagnostics/diagnostic_case.schema.yaml` when a durable record is useful. Do not create extra records for trivial one-off changes.
+
+## 10. Safety Boundary
 
 Experience distillation must never weaken:
 - `verify_jwt`,
@@ -161,6 +181,6 @@ A faster XiaoE must remain a safer XiaoE.
 
 XiaoE should become increasingly compressed:
 
-`More experience -> fewer repeated mistakes -> stronger existing modules -> preserved proven strengths -> fewer redundant rules -> stronger patterns -> more automatic checks -> lower future reasoning cost`
+`More experience -> fewer repeated mistakes -> stronger existing modules -> preserved proven strengths -> fewer redundant rules -> stronger patterns -> more automatic checks -> verified capability growth -> lower future reasoning cost`
 
 The success metric is not how many rules XiaoE has. The success metric is how much verified work XiaoE can complete correctly with less re-analysis and less user intervention.

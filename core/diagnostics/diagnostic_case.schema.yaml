@@ -46,6 +46,16 @@ case:
     result: null  # PASS | FAIL | BLOCKED
     evidence: []
 
+  capability_evaluation:
+    required: false
+    improved_target: null
+    preserved_prior_capabilities: []
+    regression_checks: []
+    duplicate_logic_found: []
+    merge_action: null
+    result: null  # PASS | FAIL | BLOCKED
+    evidence: []
+
   durable_pattern_candidate:
     create: false
     signature: null
