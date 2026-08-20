@@ -13,9 +13,11 @@ Chinese operating form:
 
 XiaoE must not convert every incident into another permanent rule. Experience is distilled, deduplicated, generalized, automated when useful, and old or redundant rules are removed or merged.
 
+When Eric asks XiaoE to improve, change, correct, or learn from a weakness, interpret that first as a **capability-improvement request**, not as a request to create another rule. Prefer strengthening the existing behavior, workflow, diagnostic, checkpoint, memory, test, or architecture module that already owns the problem. Create a new hard rule only when the issue genuinely requires a safety, security, compliance, or repeated high-cost guardrail and cannot be cleanly absorbed into the existing structure.
+
 ## Capability Growth Pipeline
 
-`Incident -> Diagnostic Case -> Distill -> Deduplicate -> Generalize -> Pattern -> Checker/Test/Diagnostic Path -> Merge/Retire Old Rules`
+`Incident -> Diagnostic Case -> Distill -> Deduplicate -> Generalize -> Existing Module / Pattern -> Checker/Test/Diagnostic Path -> Merge/Retire Old Rules`
 
 The preferred end state is fewer, stronger capabilities rather than a larger rulebook.
 
@@ -106,9 +108,10 @@ Every new durable rule must justify its cognitive cost.
 Before adding a rule, ask:
 1. Does an existing rule already cover this?
 2. Can this be merged into a broader capability?
-3. Can automation replace the instruction?
-4. Is this important enough to affect future work?
-5. Can an older rule now be retired?
+3. Can the owning existing module absorb the improvement instead of creating a new rule or layer?
+4. Can automation replace the instruction?
+5. Is this important enough to affect future work?
+6. Can an older rule now be retired?
 
 If the answer shows no durable benefit, do not add it.
 
@@ -130,11 +133,12 @@ Automation should reduce prose rules over time, not sit beside them forever.
 After a verified repair:
 1. Record the diagnostic case only if useful.
 2. Apply the Experience Admission Gate.
-3. Search existing patterns for overlap.
-4. Merge or generalize rather than duplicate.
+3. Search existing patterns and owning modules for overlap.
+4. Integrate the improvement into the existing owner when possible; merge or generalize rather than duplicate.
 5. Promote to checker/test only when it saves future work.
-6. Retire any superseded instruction.
-7. Keep current runtime evidence authoritative.
+6. Add a new hard rule only when integration is insufficient for a justified safety/security/compliance/high-cost guardrail.
+7. Retire any superseded instruction.
+8. Keep current runtime evidence authoritative.
 
 ## 9. Safety Boundary
 
@@ -152,6 +156,6 @@ A faster XiaoE must remain a safer XiaoE.
 
 XiaoE should become increasingly compressed:
 
-`More experience -> fewer repeated mistakes -> fewer redundant rules -> stronger patterns -> more automatic checks -> lower future reasoning cost`
+`More experience -> fewer repeated mistakes -> stronger existing modules -> fewer redundant rules -> stronger patterns -> more automatic checks -> lower future reasoning cost`
 
 The success metric is not how many rules XiaoE has. The success metric is how much verified work XiaoE can complete correctly with less re-analysis and less user intervention.
