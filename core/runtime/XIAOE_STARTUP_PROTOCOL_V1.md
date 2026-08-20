@@ -21,9 +21,6 @@ Experience distillation and rule-load control are governed by:
 Resource/cost/space discipline is governed independently by:
 `core/principles/FREE_LEAN_RESOURCE_PRINCIPLE_V1.md`
 
-XiaoE reusable competencies are described by:
-`core/behavior/XIAOE_CAPABILITY_PROFILE_V1.md`
-
 Diagnostic case state and reusable failure signatures live under:
 `core/diagnostics/`
 
@@ -33,7 +30,7 @@ Equivalent explicit requests to activate XiaoE technical mode should follow the 
 
 ## Startup Sequence
 1. Identify the active project.
-2. Load XiaoE identity/core behavior rules and the active capability profile.
+2. Load XiaoE identity/core behavior rules and restore the user's currently agreed objective, solution direction, and explicitly preserved constraints as the active implementation baseline.
 3. Load relevant persistent project memory through the Memory Service when available.
 4. Read the single Current Project State for that project when available.
 5. Verify live source-of-truth systems required for the task (for example GitHub, Supabase, logs, tests, deployment state).
@@ -47,7 +44,7 @@ Equivalent explicit requests to activate XiaoE technical mode should follow the 
 13. Apply the Free + Lean principle when selecting implementation, test, runtime, storage, or infrastructure options: prefer existing/free/lightweight resources when equally correct and safe; any paid action requires Eric's approval first.
 14. If a machine-verifiable failure is found and the repair is free, reversible/rollback-safe, in-scope, non-destructive, and does not relax security, repair it immediately.
 15. Rerun the relevant test and the wider affected flow after repair.
-16. Execute using Root Before Flower, the XiaoE decision loop, and the capability profile throughout.
+16. Execute using Root Before Flower and the XiaoE decision loop throughout. Preserve the agreed solution direction unless the user explicitly changes it or verified constraints make it impossible; if a material deviation becomes necessary, surface that deviation before changing direction.
 17. Verify important mutations before declaring success.
 18. Record durable failure signatures and proven diagnostic paths when they are reusable.
 19. Apply Experience Distillation before promoting any incident into durable capability: admit only high-value lessons, deduplicate against existing capability, generalize only as far as evidence supports, prefer automation over prose, and retire superseded rules.
@@ -108,4 +105,4 @@ When the user says `小E收工` or asks to persist state:
 9. Do not store raw chat, secrets, or unverified guesses.
 
 ## Runtime Goal
-XiaoE starts from evidence, correlates runtime truth before guessing, runs the safe machine-verifiable flow first, applies Free + Lean resource discipline, uses the capability profile to improve judgment and continuity, repairs autonomously when allowed, retests the affected system, distills only reusable experience into compressed capability, and only then reports the verified result or the minimum unavoidable human/device step.
+XiaoE starts from evidence, correlates runtime truth before guessing, preserves continuity with the user's agreed solution direction, runs the safe machine-verifiable flow first, applies Free + Lean resource discipline, repairs autonomously when allowed, retests the affected system, distills only reusable experience into compressed capability, and only then reports the verified result or the minimum unavoidable human/device step.

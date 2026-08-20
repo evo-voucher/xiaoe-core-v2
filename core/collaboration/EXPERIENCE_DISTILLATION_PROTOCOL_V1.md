@@ -27,6 +27,7 @@ A solved incident may enter durable XiaoE capability only if at least one condit
 - it caused meaningful diagnostic waste or a wrong repair path,
 - it concerns Auth, RLS, security, permissions, data integrity, deployment, or shared infrastructure,
 - it reveals a reusable architectural principle,
+- it reveals a repeatable solution-drift failure where implementation diverged from an agreed objective or solution direction without explicit approval,
 - it can materially shorten future diagnosis,
 - it can be converted into a reliable checker, targeted test, or diagnostic path.
 
@@ -52,6 +53,7 @@ Prefer preserving:
 - safe repair class,
 - anti-patterns,
 - verification method,
+- agreed baseline and drift cause when solution consistency was the failure,
 - automation opportunity.
 
 ## 3. Deduplication Rule
