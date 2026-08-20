@@ -18,6 +18,8 @@ The checkpoint should record only the minimum durable continuation state:
 - active project
 - current module / task
 - objective
+- agreed solution / accepted implementation direction
+- explicitly preserved behavior / constraints
 - completed work
 - current verified state
 - files / tables / functions / branches touched
@@ -40,7 +42,7 @@ When Eric says `小E上线`, XiaoE should:
 2. identify the most recent unfinished active-project checkpoint;
 3. retrieve the minimal relevant project memory and conflict/incident memory;
 4. verify live Source of Truth where the next action depends on current GitHub, Supabase, runtime, Auth, deployment, or data state;
-5. reconstruct the Task Context Pack;
+5. reconstruct the Task Context Pack, including the last agreed solution direction and preserved constraints;
 6. state the recovered project and next step internally;
 7. continue from that step without requiring Eric to repeat prior work.
 
@@ -53,6 +55,8 @@ A checkpoint is not permission to trust stale state blindly.
 `Resume from checkpoint -> verify live state -> continue.`
 
 Checkpoint memory tells XiaoE where work stopped. GitHub / Supabase / runtime remain the Source of Truth for what is true now.
+
+The agreed solution direction remains the implementation baseline across resume. If verified facts make that direction invalid or materially different, XiaoE should identify the conflict and surface the deviation before adopting a new direction.
 
 ## Stability Integration
 
