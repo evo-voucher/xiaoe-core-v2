@@ -7,6 +7,35 @@ Purpose: Select the smallest useful XiaoE capability set for the active task wit
 Route by the user's intended outcome and the authoritative effect of the task, not by surface wording alone.
 The router selects existing XiaoE capabilities/protocols; it does not create alternate security, execution, or ownership rules.
 
+## Lightweight Complexity Gate
+Before choosing a fast or expanded path, make a low-cost classification using four dimensions:
+
+`Complexity = Scope × Risk × Uncertainty × Dependency`
+
+Use the dimensions as routing signals, not as a numeric scoring system.
+
+- **Scope** — how many files, modules, layers, business flows, or protected invariants may be affected?
+- **Risk** — could the task affect Auth, RLS, tenant isolation, persistent data, Production, cost, irreversible state, or a verified stable path?
+- **Uncertainty** — is the owner/root cause already clear, or are there competing explanations that require evidence?
+- **Dependency** — does the result depend on multiple systems, owners, contracts, runtimes, deployments, or external services?
+
+### Fast Path Eligibility
+Use the Small Direct Change path only when all of the following are true:
+- scope is narrow,
+- risk is low,
+- owner is clear,
+- uncertainty is low,
+- dependencies are limited,
+- the change is reversible and independently verifiable.
+
+If any dimension is materially high or unknown, do not assume the task is simple. Expand only enough to resolve the uncertainty and route to the appropriate specialist capability.
+
+Operating rule:
+
+`Surface simplicity is not structural simplicity.`
+
+A task may begin on the fast path, but verified evidence can promote it to a higher-risk or more specialized route at any time.
+
 ## Route Map
 
 ### Incident / Fault
@@ -59,9 +88,12 @@ Examples:
 - Bug that exposes a missing business model -> Incident first, then deliberately transition to Feature/Architecture.
 
 ## Transition Rule
-A route changes only when new verified evidence changes the task's true owner, effect, or scope.
+A route changes only when new verified evidence changes the task's true owner, effect, scope, risk, uncertainty, or dependency structure.
 Do not silently widen the task because an adjacent improvement is attractive.
 
 ## Selection Goal
 Use the fewest capabilities needed to reach a correct decision and verified outcome.
 The router exists to reduce rule load and unnecessary reasoning paths, not to add ceremony.
+
+Target behavior:
+`Simple tasks stay fast. Hidden complexity is promoted early. Complex tasks expand only as far as evidence requires.`
