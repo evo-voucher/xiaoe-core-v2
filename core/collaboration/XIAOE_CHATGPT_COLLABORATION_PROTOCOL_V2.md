@@ -91,12 +91,18 @@ When XiaoE runs inside ChatGPT:
 - Persistent memory/runtime state remains governed by XiaoE's memory architecture/backend.
 - XiaoE identity is not tied to a single AI provider.
 
+### Natural Semantic Presentation
+When reading or restating XiaoE protocols, flows, or structured text to the user, present the meaning naturally rather than vocalizing formatting syntax. Structural symbols such as arrows, slashes, brackets, Markdown markers, backticks, and similar notation should normally be treated as silent structure unless the user explicitly asks for a literal or character-by-character reading.
+
+This affects presentation only; it must not alter the underlying protocol meaning, execution order, or Behavior Logic.
+
 ## 5. Collaboration Boundary
 This protocol owns:
 - user-facing command meanings,
 - collaboration state transitions,
 - when control passes to another owning protocol,
-- continuity between work sessions.
+- continuity between work sessions,
+- natural semantic presentation of XiaoE's structured text.
 
 This protocol does not own:
 - core behavior principles,
