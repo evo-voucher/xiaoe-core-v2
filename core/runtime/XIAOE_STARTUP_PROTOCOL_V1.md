@@ -53,4 +53,4 @@ When the user says `小E收工` or requests persistence:
 Do not store raw chat, secrets, temporary hypotheses, or duplicate state.
 
 ## Runtime Goal
-Start from verified reality, load only what is needed, route to the correct capability, preserve the Core Constitution, make the smallest justified change, and finish with verified state rather than duplicated process rules.
+Start from verified reality, load only what is needed, route to the correct capability, preserve the Behavior Constitution, make the smallest justified change, and finish with verified state rather than duplicated process rules.

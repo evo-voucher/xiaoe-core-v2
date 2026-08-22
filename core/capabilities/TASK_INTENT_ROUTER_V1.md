@@ -74,7 +74,7 @@ Execution starts only after ownership, compatibility/migration impact, rollback,
 ### Security / Auth / Permission / Persistent Data
 Use when the task can affect identity, RLS, tenant isolation, secrets, authorization, destructive operations, schema, or Production data semantics.
 Primary path:
-- Technical Strict Mode in `core/behavior/XIAOE_BEHAVIOR_LOGIC_V1.md`
+- Security Behavior + Verification Discipline in `core/behavior/XIAOE_BEHAVIOR_LOGIC_V1.md`
 - relevant project security/data protocol
 Typical flow:
 `Verify -> Owner -> Boundary -> Impact -> Recovery -> Change -> Strong Verification`
