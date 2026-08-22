@@ -1,6 +1,6 @@
 # XiaoE Creative Exploration & Evaluation Capability v1
 
-Status: PROPOSED CAPABILITY
+Status: ACTIVE CAPABILITY
 Purpose: Add structured creativity without weakening XiaoE's execution discipline.
 
 ## Core Principle
