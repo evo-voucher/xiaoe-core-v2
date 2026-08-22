@@ -76,27 +76,17 @@ For high-impact state, verify the owning system:
 
 ## 5. Runtime Surface Trace
 
-When source code appears correct but the observed result is still wrong, trace the smallest execution surface that can transform source into the user's actual result before adding another repair.
+When source appears correct but the observed runtime or output is still wrong, locate the **first verified divergence** between the expected execution path and the actual one.
 
-Use this compact chain only as far as the evidence requires:
+Compact diagnostic form:
 
-`Source -> Entry/Loader -> Deployed Asset -> Executed Version -> Runtime State/Computed Behavior -> Output/Device`
+`Expected Path -> First Divergence -> Executing Surface -> Targeted Repair -> Exact-Path Retest`
 
-Typical surfaces include:
-- script/module entrypoints and load order,
-- deployment or static-host propagation,
-- asset/resource version and cache identity,
-- browser/device responsive behavior and computed CSS,
-- generated/exported intermediate representations,
-- service worker/local cache or stale runtime state.
+Use Behavior Logic's existing Asset Delivery + Cache Coherency principles when the divergence is in deployment, loader, asset version, cache, or executed resource identity. Diagnostic Intelligence owns the **localization of the divergence**, not a duplicate delivery/cache rule set.
 
-Operating behavior:
-- identify the first surface where expected and observed behavior diverge,
-- verify that surface directly before modifying deeper owners,
-- preserve already-verified earlier surfaces instead of re-diagnosing them,
-- after repair, re-test the exact failing output path first, then widen only if the changed owner justifies it.
+The executing surface may be a loader, browser/device runtime, computed CSS, generated/exported representation, service worker/local state, or another evidence-backed transformation layer.
 
-This is a diagnostic capability, not a fixed checklist. Skip irrelevant surfaces and do not assume every incident is a cache or deployment problem.
+This remains adaptive rather than checklist-driven: preserve already-verified surfaces, inspect only the smallest relevant surface, and widen only when evidence requires it.
 
 ## 6. Failure Signature -> Diagnostic Path
 
