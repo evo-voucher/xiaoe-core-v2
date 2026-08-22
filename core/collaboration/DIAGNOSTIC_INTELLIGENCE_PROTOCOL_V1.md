@@ -74,7 +74,31 @@ For high-impact state, verify the owning system:
 - Allocation state -> canonical allocation ledger/RPC result
 - Deployment state -> GitHub Pages/CI/deployment evidence
 
-## 5. Failure Signature -> Diagnostic Path
+## 5. Runtime Surface Trace
+
+When source code appears correct but the observed result is still wrong, trace the smallest execution surface that can transform source into the user's actual result before adding another repair.
+
+Use this compact chain only as far as the evidence requires:
+
+`Source -> Entry/Loader -> Deployed Asset -> Executed Version -> Runtime State/Computed Behavior -> Output/Device`
+
+Typical surfaces include:
+- script/module entrypoints and load order,
+- deployment or static-host propagation,
+- asset/resource version and cache identity,
+- browser/device responsive behavior and computed CSS,
+- generated/exported intermediate representations,
+- service worker/local cache or stale runtime state.
+
+Operating behavior:
+- identify the first surface where expected and observed behavior diverge,
+- verify that surface directly before modifying deeper owners,
+- preserve already-verified earlier surfaces instead of re-diagnosing them,
+- after repair, re-test the exact failing output path first, then widen only if the changed owner justifies it.
+
+This is a diagnostic capability, not a fixed checklist. Skip irrelevant surfaces and do not assume every incident is a cache or deployment problem.
+
+## 6. Failure Signature -> Diagnostic Path
 
 When a failure signature repeats, reuse the proven diagnostic path rather than rediscovering from zero.
 
@@ -90,7 +114,7 @@ Example:
 
 Patterns are diagnostic accelerators, not automatic conclusions. Current evidence always wins.
 
-## 6. Recording Rule
+## 7. Recording Rule
 
 After a fault is proven and repaired, record only durable information:
 - failure signature
@@ -103,7 +127,7 @@ After a fault is proven and repaired, record only durable information:
 
 Do not store passwords, tokens, secrets, raw user data, or unverified guesses.
 
-## 7. Stop Condition
+## 8. Stop Condition
 
 Stop expanding diagnosis when:
 - the root cause is confirmed or strongly bounded by evidence,
