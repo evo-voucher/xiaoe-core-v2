@@ -1,0 +1,16 @@
+name: Protect Behavior Logic
+
+on:
+  pull_request:
+    paths:
+      - 'core/behavior/XIAOE_BEHAVIOR_LOGIC_V1.md'
+
+jobs:
+  block-behavior-change:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block normal changes to frozen Behavior Logic
+        run: |
+          echo 'XiaoE Behavior Logic is frozen by core/governance/BEHAVIOR_LOGIC_FREEZE_V1.md.'
+          echo 'Changes require the dedicated exception process and explicit user authorization.'
+          exit 1
