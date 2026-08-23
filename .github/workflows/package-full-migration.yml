@@ -1,0 +1,40 @@
+name: Package XiaoE Full Migration
+
+on:
+  push:
+    branches:
+      - xiaoe-full-migration-package-20260823
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+
+      - name: Build checksum manifest
+        shell: bash
+        run: |
+          find . -type f \
+            -not -path './.git/*' \
+            -not -name 'SHA256SUMS.txt' \
+            -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS.txt
+
+      - name: Build full migration ZIP
+        shell: bash
+        run: |
+          zip -r XiaoE_Core_v4.1_TRUE_FULL_MIGRATION_2026-08-23.zip . \
+            -x '.git/*' \
+            -x 'XiaoE_Core_v4.1_TRUE_FULL_MIGRATION_2026-08-23.zip'
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: XiaoE-Core-v4.1-True-Full-Migration-2026-08-23
+          path: XiaoE_Core_v4.1_TRUE_FULL_MIGRATION_2026-08-23.zip
+          if-no-files-found: error
+          retention-days: 30
