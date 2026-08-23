@@ -1,0 +1,29 @@
+{
+  "id": "2e9503b8-486e-4e62-9f78-ba0260ecaa61",
+  "tags": ["checkpoint", "companion-ai", "capability-growth"],
+  "title": "Current Project State",
+  "source": "xiaoe",
+  "content": "Completed:\n- XiaoE Core remains organized around Behavior as the frozen root, with peripheral layers for capabilities, collaboration, diagnostics, governance, memory, principles, and runtime.\n- Behavior remains the anti-drift reasoning foundation. Core chain remains Fact First, Owner First, Scope First, Root Cause, Smallest Change, Re-verify, Preserve Stable State.\n- Root Before Flower remains active as a direction principle: check deeper causal or owning layers before compensating at visible symptom layers; it is not a mandatory layer-by-layer checklist.\n- Peripheral evolution remains free as long as it follows Behavior. Responsibility deduplication remains preferred over adding parallel rules or layers.\n- Natural Semantic Presentation is active in Collaboration. When XiaoE reads structured logic aloud, preserve original logic terms and sequence while treating arrows, slashes, brackets, Markdown markers, backticks, and similar formatting symbols as silent unless literal reading is explicitly requested.\n- PR #16 introduced natural semantic presentation. PR #17 refined it to preserve logic terms while silencing symbols.\n- PR #17 successfully merged to main. Verified merge SHA: 218a6201eb3a8da40e7b1a36d43b14206779f999.\n- Behavior Logic itself was not modified by PR #16 or PR #17.\n\nCurrent state:\n- Behavior is intentionally strong on reasoning discipline and comparatively loose on peripheral architecture, leaving sufficient freedom for Capability, Router, Runtime, Memory, Collaboration, Diagnostics, and project-specific structures to evolve.\n- Behavior should not be expanded with project-specific or technology-specific detail unless strong evidence shows the item is genuinely a cross-project anti-drift principle.\n- XiaoE read-aloud presentation now preserves terms such as Fact, Owner, Scope, Root Cause, Smallest Change, and Re-verify, while not vocalizing structural symbols.\n- GitHub remains source of truth for versioned behavior, architecture, and protocols. Supabase remains persistent memory/runtime backend.\n- XiaoE Core and Evolution Voucher remain isolated systems.\n\nUnfinished / deferred:\n- No active XiaoE Core engineering task remains from this session.\n- Companion AI remains a future separate derivative project only; it has not been created.\n- Production Runtime Key/client remains intentionally unprovisioned unless later required.\n- External AI Router/provider runtime remains deferred while ChatGPT-hosted operation is sufficient.\n\nRisks / invariants:\n- Do not casually modify frozen Behavior. Peripheral layers should evolve around Behavior.\n- Capability compression must preserve useful function; remove duplication, not capability.\n- One responsibility should have one owner.\n- Current verified runtime/source evidence outranks stored memory.\n- Do not reinterpret Natural Semantic Presentation as automatic paraphrasing: preserve original logic terms by default; only formatting symbols are silent.\n\nLast successful verification:\n- PR #17 was verified mergeable and successfully merged to main with merge SHA 218a6201eb3a8da40e7b1a36d43b14206779f999.\n\nFailed paths not to repeat:\n- Do not place speech/presentation behavior into frozen Behavior when Collaboration owns the user-facing presentation concern.\n- Do not translate every structured logic chain into prose during read-aloud; preserve original terms unless explanation or paraphrasing is useful.\n\nNext step:\n- On next 小E上线, restore this current state, verify live GitHub/Supabase where relevant, then continue from the user's next requested task.\n- No approval is required merely to resume or read state; normal safety gates still apply to future material mutations.\n",
+  "user_id": null,
+  "metadata": {
+    "session_status": "completed",
+    "future_direction": "separate_companion_ai_core",
+    "checkpoint_reason": "小E收工",
+    "latest_verified_merge_sha": "ac8c29100ba53713f2ea7072ab1b671bbc551427"
+  },
+  "is_active": true,
+  "namespace": "project",
+  "confidence": 10,
+  "created_at": "2026-08-16T10:02:49.897437+00:00",
+  "importance": 10,
+  "memory_key": "03701f055cfc98de02f2514a12efcd73",
+  "updated_at": "2026-08-22T04:08:41.555517+00:00",
+  "memory_type": "current_project_state",
+  "project_key": "xiaoe_core_v2",
+  "valid_until": null,
+  "supersedes_id": null,
+  "organization_id": null,
+  "source_priority": 100,
+  "last_verified_at": "2026-08-22T04:08:41.555517+00:00",
+  "verification_status": "verified"
+}
