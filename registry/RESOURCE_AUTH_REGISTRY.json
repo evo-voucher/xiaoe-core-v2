@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.1",
+  "updated_at": "2026-09-06",
+  "mode": "strict",
+  "default_access": "deny",
+  "principals": [
+    {
+      "principal_key": "xiaoe_core_v2",
+      "display_name": "小E",
+      "allowed_actions": ["read", "copy", "manage"],
+      "destructive_requires_explicit_owner_approval": true
+    },
+    {
+      "principal_key": "daughter_companion_ai",
+      "display_name": "小爱",
+      "allowed_actions": ["read", "copy"],
+      "destructive_requires_explicit_owner_approval": true
+    }
+  ],
+  "resources": [
+    {
+      "resource_key": "github_xiao_e_26",
+      "service": "github",
+      "account": "Xiao-E-26",
+      "scope": "installed_account",
+      "status": "authorized",
+      "policy": {
+        "read": true,
+        "copy_out": true,
+        "manage": true,
+        "destructive": "explicit_owner_approval"
+      }
+    },
+    {
+      "resource_key": "supabase_mmkeqwzswabmchfmgixc",
+      "service": "supabase",
+      "organization_id": "mmkeqwzswabmchfmgixc",
+      "scope": "organization_projects",
+      "status": "authorized",
+      "policy": {
+        "read": true,
+        "copy_out": true,
+        "manage": true,
+        "destructive": "explicit_owner_approval"
+      }
+    },
+    {
+      "resource_key": "supabase_iyubymxvvunkwrbnuzep",
+      "service": "supabase",
+      "organization_id": "iyubymxvvunkwrbnuzep",
+      "scope": "organization_projects",
+      "status": "authorized",
+      "policy": {
+        "read": true,
+        "copy_out": true,
+        "manage": true,
+        "destructive": "explicit_owner_approval"
+      }
+    }
+  ],
+  "cross_environment_rules": {
+    "require_explicit_source": true,
+    "require_explicit_destination": true,
+    "source_immutable_by_default": true,
+    "copy_does_not_imply_cutover": true,
+    "secrets_never_copied": true,
+    "destination_credentials_must_be_reissued": true,
+    "production_writes_require_target_lock": true
+  }
+}

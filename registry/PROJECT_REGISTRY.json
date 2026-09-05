@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.1",
+  "updated_at": "2026-09-06",
+  "resolution_mode": "strict",
+  "projects": [
+    {
+      "project_key": "xiaoe_core_v2",
+      "display_name": "小E",
+      "aliases": ["小E", "XiaoE", "xiaoe", "小E核心"],
+      "activation_phrases": ["小E上线"],
+      "github": {
+        "repository_full_name": "Xiao-E-26/xiaoe-core-md",
+        "canonical_url": "https://github.com/Xiao-E-26/xiaoe-core-md",
+        "default_branch": "main"
+      },
+      "supabase": {
+        "project_id": "pgdnwjgfxpaszazuofns",
+        "project_name": "xiaoeai2026@gmail.com's Project",
+        "role": "primary",
+        "verified_by_tables": ["xiaoe_system_meta", "xiaoe_policy_rules", "runtime_clients"]
+      },
+      "management_mode": "direct",
+      "environment": "primary",
+      "status": "active"
+    },
+    {
+      "project_key": "daughter_companion_ai",
+      "display_name": "小爱",
+      "aliases": ["小爱", "daughter", "daughter project", "Daughter Project"],
+      "activation_phrases": ["小爱上线"],
+      "activation_binding": "canonical GitHub 小爱 project",
+      "github": {
+        "repository_full_name": "Xiao-E-26/daughter-companion-ai",
+        "canonical_url": "https://github.com/Xiao-E-26/daughter-companion-ai",
+        "default_branch": "main"
+      },
+      "supabase": {
+        "project_id": "bnxjlbuohnujgvryttzj",
+        "project_name": "daughter-companion-ai-v2",
+        "role": "primary",
+        "verified_by_tables": ["child_profiles", "chat_sessions", "memory_candidates", "durable_memories", "safety_events", "memory_policy"]
+      },
+      "management_mode": "direct",
+      "environment": "primary",
+      "status": "active"
+    },
+    {
+      "project_key": "evo_voucher_production",
+      "display_name": "EVO Voucher Production",
+      "aliases": ["EVO Voucher", "EVO Voucher Production", "voucher production", "production voucher"],
+      "activation_phrases": [],
+      "github": {
+        "repository_full_name": "evo-voucher/evolution-optical-voucher",
+        "canonical_url": "https://github.com/evo-voucher/evolution-optical-voucher",
+        "default_branch": "main"
+      },
+      "supabase": {
+        "project_id": "xfivcfwexcxsyiylgryn",
+        "project_name": "external_project_ref:xfivcfwexcxsyiylgryn",
+        "role": "disconnected"
+      },
+      "management_mode": "disconnected",
+      "environment": "production",
+      "status": "inactive_connection_removed"
+    },
+    {
+      "project_key": "voucher_stage",
+      "display_name": "Voucher Stage",
+      "aliases": ["Voucher Stage", "Stage Voucher", "voucher staging", "stage voucher"],
+      "activation_phrases": [],
+      "github": {
+        "repository_full_name": "evo-voucher/voucher-stage-frontend",
+        "canonical_url": "https://github.com/evo-voucher/voucher-stage-frontend",
+        "default_branch": "main"
+      },
+      "supabase": {
+        "project_id": "tagusbcluzoxueixjmwh",
+        "project_name": "external_project_ref:tagusbcluzoxueixjmwh",
+        "role": "disconnected"
+      },
+      "management_mode": "disconnected",
+      "environment": "stage",
+      "status": "inactive_connection_removed"
+    },
+    {
+      "project_key": "voucher_commercial",
+      "display_name": "Commercial Voucher",
+      "aliases": ["Commercial Voucher", "Voucher Commercial", "commercial voucher", "voucher commercial"],
+      "activation_phrases": [],
+      "github": {
+        "repository_full_name": "xiaoe-ai/voucher-commercial",
+        "canonical_url": "https://github.com/xiaoe-ai/voucher-commercial",
+        "default_branch": "main"
+      },
+      "supabase": {
+        "project_id": "hukihbcyyqhanaqrizvm",
+        "project_name": "external_project_ref:hukihbcyyqhanaqrizvm",
+        "role": "disconnected"
+      },
+      "management_mode": "disconnected",
+      "environment": "commercial",
+      "status": "inactive_connection_removed"
+    },
+    {
+      "project_key": "xiaoe_fresh_verify_20260824",
+      "display_name": "小E Fresh Rebuild Verification",
+      "aliases": ["fresh verify", "fresh rebuild verify"],
+      "activation_phrases": [],
+      "github": {
+        "repository_full_name": "Xiao-E-26/xiaoe-core-md",
+        "canonical_url": "https://github.com/Xiao-E-26/xiaoe-core-md",
+        "default_branch": "main"
+      },
+      "supabase": {
+        "project_id": "hfphfquwflupnazxibnx",
+        "project_name": "xiaoe-core-fresh-verify-20260824",
+        "role": "verification_only"
+      },
+      "management_mode": "verification_only",
+      "environment": "verification",
+      "status": "inactive_verification"
+    }
+  ]
+}
