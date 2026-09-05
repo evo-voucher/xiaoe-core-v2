@@ -28,13 +28,13 @@ export const PROJECTS: readonly ProjectRecord[] = [
     aliases: ["小E", "xiaoe", "xiaoe core", "小E核心"],
     activationPhrases: ["小E上线"],
     github: {
-      repositoryFullName: "Xiao-E-26/xiaoe-core-md",
-      canonicalUrl: "https://github.com/Xiao-E-26/xiaoe-core-md",
+      repositoryFullName: "evo-voucher/xiaoe-core-v2",
+      canonicalUrl: "https://github.com/evo-voucher/xiaoe-core-v2",
       defaultBranch: "main",
     },
     supabase: {
-      projectId: "pgdnwjgfxpaszazuofns",
-      projectName: "xiaoeai2026@gmail.com's Project",
+      projectId: "iovazhaxsllwgihblsfy",
+      projectName: "xiaoe-core-v2",
       role: "primary",
     },
     environment: "primary",
