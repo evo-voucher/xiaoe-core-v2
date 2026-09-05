@@ -1,1 +1,0 @@
-XiaoE portable package replacement is being assembled on branch upgrade/portable-model-20260906. This marker will be removed by the final replacement tree.
