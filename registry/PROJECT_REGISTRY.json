@@ -9,13 +9,13 @@
       "aliases": ["小E", "XiaoE", "xiaoe", "小E核心"],
       "activation_phrases": ["小E上线"],
       "github": {
-        "repository_full_name": "Xiao-E-26/xiaoe-core-md",
-        "canonical_url": "https://github.com/Xiao-E-26/xiaoe-core-md",
+        "repository_full_name": "evo-voucher/xiaoe-core-v2",
+        "canonical_url": "https://github.com/evo-voucher/xiaoe-core-v2",
         "default_branch": "main"
       },
       "supabase": {
-        "project_id": "pgdnwjgfxpaszazuofns",
-        "project_name": "xiaoeai2026@gmail.com's Project",
+        "project_id": "iovazhaxsllwgihblsfy",
+        "project_name": "xiaoe-core-v2",
         "role": "primary",
         "verified_by_tables": ["xiaoe_system_meta", "xiaoe_policy_rules", "runtime_clients"]
       },
