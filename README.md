@@ -1,28 +1,34 @@
-# xiaoe-core-md
-XiaoE AI Core v4.1 - Memory, Behavior, Runtime, Governance and AI Router
+# xiaoe-core-v2
 
-Active repository: `Xiao-E-26/xiaoe-core-md`
+XiaoE AI Core v4.1 — Memory, Behavior, Runtime, Governance and AI Orchestrator.
 
-## Migration readiness
+Canonical repository: `evo-voucher/xiaoe-core-v2`  
+Canonical Supabase project: `iovazhaxsllwgihblsfy`  
+Architecture: `memory_fusion_v3_plus_governance_v4_1`
 
-Status: **READY — Fresh Rebuild Core Verified**
-Verification mode: isolated fresh-project rebuild + live validation
-Stable project key: `xiaoe_core_v2`
+## Runtime status
 
-Start here:
-- Full migration guide: [`MIGRATION_GUIDE_FULL.md`](./MIGRATION_GUIDE_FULL.md)
-- Latest verification report: [`MIGRATION_VERIFICATION_REPORT.md`](./MIGRATION_VERIFICATION_REPORT.md)
-- Historical provenance: [`architecture/PROVENANCE.md`](./architecture/PROVENANCE.md)
+Status: **VERIFIED READY**  
+Verified on: **2026-09-06**
 
-Fresh rebuild has been completed successfully on a separate brand-new Supabase project. `VERIFIED READY` is reserved for completion of the remaining end-to-end HTTP transport/auth test against `memory-gateway` using both a valid destination JWT and runtime key.
+The live `memory-gateway v4` and `project-resolver v3` path passed end-to-end checks with JWT, Runtime Key, scope gate, RPC, memory and context. Invalid credentials and an unauthorized write were rejected. Runtime credentials remain protected by Supabase Vault; the database stores only the SHA-256 token hash.
 
-## Strict project resolution
+## Protected baseline
 
-XiaoE must identify and lock the correct project before reading files, returning URLs, or making changes.
+- Runtime client: `chatgpt_xiaoe_runtime`
+- Runtime scopes: `memory:read`, `memory:write`, `project:state`
+- Protected layers: 8, including `runtime_transport`
+- Canonical registries: `registry/PROJECT_REGISTRY.json` and `registry/RESOURCE_AUTH_REGISTRY.json`
+- Canonical resolver: `supabase/functions/_shared/project-resolver.ts`
+- Latest security hardening source: `supabase/migrations/013_runtime_security_anomaly_exec_hardening.sql`
 
-- Canonical registry: [`registry/PROJECT_REGISTRY.json`](./registry/PROJECT_REGISTRY.json)
-- Resolution policy: [`governance/PROJECT_RESOLUTION_POLICY.md`](./governance/PROJECT_RESOLUTION_POLICY.md)
-- Mode: **STRICT — verify, never guess**
-- Ambiguous project identity: stop and ask the user
-- Cross-project work: requires explicit source and destination
-- Verification-only Supabase projects must never be returned as production projects
+## Operating rules
+
+- **FACT FIRST / OWNER FIRST / SCOPE FIRST**
+- Resolve and lock the project before reading, writing or returning links.
+- Production writes require an explicit target lock and owner approval.
+- Cross-project copy requires explicit source and destination; source stays immutable by default.
+- Secrets are never copied.
+- Two consecutive failures require STOP and diagnosis.
+
+See [`SELECTIVE_FUSION_REPORT_2026-09-06.md`](./SELECTIVE_FUSION_REPORT_2026-09-06.md) for the package integration boundary and verification record.

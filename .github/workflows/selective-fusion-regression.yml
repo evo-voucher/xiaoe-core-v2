@@ -1,0 +1,56 @@
+name: Selective Fusion Regression
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pytest
+      - run: python -m compileall -q integrations runtime tests
+      - run: python -m pytest -q
+
+  deno:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check and test runtime and intelligence boundaries
+        run: |
+          deno check \
+            core/runtime/XIAOE_RUNTIME_CLIENT_V1.ts \
+            core/runtime/XIAOE_STARTUP_ORCHESTRATOR_V1.ts \
+            core/intelligence/XIAOE_CONTEXT_BUILDER_V1.ts \
+            core/intelligence/XIAOE_INTELLIGENCE_EXECUTION_BOUNDARY_V1.ts \
+            core/intelligence/XIAOE_RESPONSE_VALIDATOR_V1.ts
+          deno test \
+            core/runtime/XIAOE_STARTUP_ORCHESTRATOR_V1_test.ts \
+            core/intelligence/XIAOE_INTELLIGENCE_EXECUTION_BOUNDARY_V1_test.ts \
+            core/intelligence/XIAOE_INTELLIGENCE_STABILITY_V1_test.ts
+
+  protected-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Ensure protected bindings were not replaced
+        run: |
+          git diff --exit-code origin/${{ github.base_ref }}...HEAD -- \
+            registry/PROJECT_REGISTRY.json \
+            registry/RESOURCE_AUTH_REGISTRY.json \
+            supabase/functions/_shared/project-resolver.ts \
+            supabase/functions/memory-gateway/index.ts \
+            supabase/migrations/013_runtime_security_anomaly_exec_hardening.sql
